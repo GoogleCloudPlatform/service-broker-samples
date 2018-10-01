@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Link Blocked</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+  </head>
+
+  <body class="container bg-dark">
+  <br/>
+  <br/>
+  <div class="card">
+    <div class="card-body bg-danger text-white">
+      <h5 class="card-title">Blocked</h5>
+      <p class="card-text">The site this shortened URL goes to is blocked for hosting malicious content.</p>
+      <a th:href="@{/(edit,${link.stub})}" class="btn btn-light">Edit "<span th:text="${link.stub}"></span>"</a>
+    </div>
+  </div>
+  </body>
+</html>

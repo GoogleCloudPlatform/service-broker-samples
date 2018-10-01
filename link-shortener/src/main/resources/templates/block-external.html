@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Going to the public Internet</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+  </head>
+
+  <body class="container bg-info">
+  <br/>
+  <br/>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Leaving to the Internet</h5>
+      <p class="card-text">This link leaves your organization and goes to a public Internet site.</p>
+      <img th:src="@{${'/api/v1/links/' + link.stub + '/preview'}}" class="mx-auto d-block img-thumbnail"/>
+      <a th:href="${link.url}" th:text="${link.url}" target="_blank" class="btn btn-primary"></a>
+    </div>
+  </div>
+
+  </body>
+
+</html>
