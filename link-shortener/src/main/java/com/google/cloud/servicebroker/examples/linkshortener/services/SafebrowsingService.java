@@ -37,30 +37,36 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * SafebrowsingService provides access to the Google Safebrowsing API which is what protects
- * Chrome users from going to malicious sites.
+ * SafebrowsingService provides access to the Google Safebrowsing API which is what protects Chrome
+ * users from going to malicious sites.
  */
 @Service
 public class SafebrowsingService {
 
   private static final Logger LOG = LoggerFactory.getLogger(SafebrowsingService.class);
 
-  @Value("${google.api.key}")
-  private String googleApiKey;
+  private final String googleApiKey;
   private final Safebrowsing client;
 
-  public SafebrowsingService() throws GeneralSecurityException, IOException {
-    client = new Safebrowsing.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), null).build();
+  public SafebrowsingService(@Value("${google.api.key}") String googleApiKey) throws GeneralSecurityException, IOException {
+    Objects.requireNonNull(googleApiKey);
+
+    this.googleApiKey = googleApiKey;
+
+    client = new Safebrowsing.Builder(
+        GoogleNetHttpTransport.newTrustedTransport(),
+        JacksonFactory.getDefaultInstance(),
+        null).build();
   }
 
   /**
-   * threatStatus returns true if the Safebrowsing API returns no threats in the list for the given
-   * URL of any type for any platform.
+   * Returns a threat designator for a URL. A site is malicious if the Safebrowsing API returns
+   * threats of any type for any platform.
    *
    * This is NOT CACHED because threat information is always changing.
    *
    * @param url - the URL to check
-   * @return a ThreatStatus for the URL, unknown if an exception occurred on lookup.
+   * @return a ThreatStatus for the URL, UNKNOWN if an exception occurred on lookup.
    */
   public ThreatStatus threatStatus(final String url) {
     Objects.requireNonNull(url);
@@ -70,7 +76,8 @@ public class SafebrowsingService {
       // We construct a ThreatInfo instance which tells the service which kind of threats we're
       // looking for.
       final ThreatInfo ti = new ThreatInfo();
-      ti.setThreatTypes(Arrays.asList("MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"));
+      ti.setThreatTypes(Arrays.asList("MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE",
+          "POTENTIALLY_HARMFUL_APPLICATION"));
       ti.setPlatformTypes(Collections.singletonList("ANY_PLATFORM"));
 
       final FindThreatMatchesRequest request = new FindThreatMatchesRequest();
@@ -88,12 +95,12 @@ public class SafebrowsingService {
           .execute();
 
       final List<ThreatMatch> threatMatches = findThreatMatchesResponse.getMatches();
-      if(threatMatches == null || threatMatches.size() == 0) {
+      if (threatMatches == null || threatMatches.size() == 0) {
         return ThreatStatus.BENIGN;
       } else {
         return ThreatStatus.MALICIOUS;
       }
-    } catch(IOException e) {
+    } catch (IOException e) {
       LOG.error("couldn't get safebrowsing status", e);
       return ThreatStatus.UNKNOWN;
     }

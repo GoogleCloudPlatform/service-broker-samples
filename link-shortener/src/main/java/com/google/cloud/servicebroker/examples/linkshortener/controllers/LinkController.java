@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Contains controller code for the links.
  */
 @RestController
-@RequestMapping(value = "/api/v1/links", produces=MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/links", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LinkController {
 
   @Autowired
@@ -49,27 +49,47 @@ public class LinkController {
   @Autowired
   private ScreenshotService screenshotService;
 
+  /**
+   * Gets a link by a given short name.
+   *
+   * @param stub The short name of the link.
+   * @return The link of one exists with the given stub.
+   */
   @GetMapping("/{stub}")
   public Optional<Link> getLink(@PathVariable String stub) {
     return linkRepository.findById(stub);
   }
 
+  /**
+   * Gets augmented data for a link with the given stub.
+   *
+   * @param stub The short name of the link.
+   * @return Augmented info, if the link exists.
+   */
   @GetMapping("/{stub}/info")
   public Optional<LinkInfo> getInfo(@PathVariable String stub) {
     final Optional<Link> link = getLink(stub);
 
-    if(link.isPresent()) {
+    if (link.isPresent()) {
       return Optional.of(linkInfoService.getLinkInfo(link.get()));
     }
 
     return Optional.empty();
   }
 
+  /**
+   * Gets a JPEG preview of the link.
+   *
+   * @param stub The link to grab.
+   * @param response The response to write the JSON back to.
+   * @throws IOException If the user terminated the request before it could complete.
+   */
   @GetMapping("/{stub}/preview")
   public void getPreview(@PathVariable String stub, HttpServletResponse response)
       throws IOException {
     final Optional<Link> link = getLink(stub);
-    if(!link.isPresent()) {
+
+    if (!link.isPresent()) {
       response.sendError(404, "stub not found");
       return;
     }
@@ -78,11 +98,22 @@ public class LinkController {
     response.getOutputStream().write(screenshotService.getScreenshot(link.get().getUrl()));
   }
 
+  /**
+   * Creates a link in the repository.
+   *
+   * @param link The link to create.
+   * @return The created link.
+   */
   @PostMapping("/")
   public Link createLink(@RequestBody Link link) {
     return linkRepository.save(link);
   }
 
+  /**
+   * Deletes a link from the repository.
+   *
+   * @param stub The short name of the link.
+   */
   @DeleteMapping("/{stub}")
   public void deleteLink(@PathVariable String stub) {
     linkRepository.deleteById(stub);

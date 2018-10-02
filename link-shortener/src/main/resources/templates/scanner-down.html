@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Going to the public Internet</title>
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-  </head>
+<head>
+  <title>Going to the public Internet</title>
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
+</head>
 
-  <body class="container bg-warning">
-  <br/>
-  <br/>
-  <div class="card">
-    <div class="card-body">
-      <div class="alert alert-warning">Warning: the automated virus scanners are down right now and this site could not be scanned!</div>
-
-      <h5 class="card-title">Leaving to the Internet</h5>
-      <p class="card-text">This link leaves your organization and goes to a public Internet site.
-        Open it at your own risk.</p>
-      <img th:src="@{${'/api/v1/links/' + link.stub + '/preview'}}" class="mx-auto d-block img-thumbnail"/>
-      <a th:href="${link.url}" th:text="${link.url}" target="_blank" class="btn btn-primary"></a>
+<body class="container bg-warning">
+<br/>
+<br/>
+<div class="card">
+  <div class="card-body">
+    <div class="alert alert-warning">
+      Warning: the automated virus scanners are down right now and this site could not be scanned!
     </div>
-  </div>
 
-  </body>
+    <h5 class="card-title">Leaving to the Internet</h5>
+    <p class="card-text">
+      This link leaves your organization and goes to a public Internet site.
+      Open it at your own risk.
+    </p>
+    <img th:src="@{${'/api/v1/links/' + link.stub + '/preview'}}" class="mx-auto d-block img-thumbnail"/>
+    <a th:href="${link.url}" th:text="${link.url}" target="_blank" class="btn btn-primary"></a>
+  </div>
+</div>
+
+</body>
 
 </html>

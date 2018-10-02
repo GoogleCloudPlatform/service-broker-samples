@@ -41,12 +41,11 @@ public class RouteController {
   private LinkInfoService infoService;
 
   /**
-   * Generates a redirect or a page displaying the short-url.
-   * If the page does not exist, the user is asked to edit it.
-   * If the page is internal, the user is redirected.
-   * If the page is external and malicious, the page is blocked.
-   * If the page is external and benign, a warning and preview of the page is shown
-   * before the user goes there.
+   * Generates a redirect or a page displaying the short-url. If the page does not exist, the user
+   * is asked to edit it. If the page is internal, the user is redirected. If the page is external
+   * and malicious, the page is blocked. If the page is external and benign, a warning and preview
+   * of the page is shown before the user goes there.
+   *
    * @param stub The stub the user was linked to.
    * @param model The model of the page the link is added to if we need to render an interstitial.
    * @return A redirect or template to load.
@@ -59,13 +58,13 @@ public class RouteController {
     }
 
     final LinkInfo linkInfo = infoService.getLinkInfo(repo.get());
-    if(linkInfo.isLocal()) {
+    if (linkInfo.isLocal()) {
       return "redirect:" + repo.get().getUrl();
     }
 
     model.addAttribute("link", repo.get());
 
-    switch(linkInfo.getThreatStatus()) {
+    switch (linkInfo.getThreatStatus()) {
       case MALICIOUS:
         return "blocked";
       case BENIGN:
@@ -77,6 +76,7 @@ public class RouteController {
 
   /**
    * Get the index page for describing what the site is and how to create a new URL.
+   *
    * @return the index page template name.
    */
   @GetMapping("/")

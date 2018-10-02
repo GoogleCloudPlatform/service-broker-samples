@@ -19,24 +19,37 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.pagespeedonline.Pagespeedonline;
 import com.google.api.services.pagespeedonline.Pagespeedonline.Pagespeedapi.Runpagespeed;
-import com.google.api.services.pagespeedonline.model.PagespeedApiPagespeedResponseV4;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+/**
+ * ScreenshotServices uses Google's Pagespeed API to
+ */
 @Service
 public class ScreenshotService {
-  @Value("${google.api.key}")
-  private String googleApiKey;
 
+  private static final Logger LOG = LoggerFactory.getLogger(ScreenshotService.class);
+
+  private final String googleApiKey;
   private final Pagespeedonline client;
 
-  public ScreenshotService() throws GeneralSecurityException, IOException {
-    client = new Pagespeedonline.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory
-         .getDefaultInstance(), null).build();
+  public ScreenshotService(@Value("${google.api.key}") String googleApiKey)
+      throws GeneralSecurityException, IOException {
+    Objects.requireNonNull(googleApiKey);
+    this.googleApiKey = googleApiKey;
+
+    client = new Pagespeedonline.Builder(
+        GoogleNetHttpTransport.newTrustedTransport(),
+        JacksonFactory.getDefaultInstance(),
+        null)
+        .build();
   }
 
   @Cacheable("screenshot-service")
@@ -45,10 +58,11 @@ public class ScreenshotService {
       final Runpagespeed request = client.pagespeedapi().runpagespeed(url);
       request.setScreenshot(true);
       request.setRule(Collections.singletonList("MinifyHTML"));
-      final PagespeedApiPagespeedResponseV4 response = request.execute();
-      return response.getScreenshot().decodeData();
-    } catch(IOException e) {
-      e.printStackTrace();
+
+      return request.execute().getScreenshot().decodeData();
+
+    } catch (IOException e) {
+      LOG.error("Couldn't get screenshot", e);
       return new byte[]{};
     }
   }

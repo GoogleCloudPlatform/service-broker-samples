@@ -39,8 +39,6 @@ public class Link {
   @Size(max=1024)
   private String url;
 
-  public Link(){}
-
   public String getStub() {
     return stub;
   }

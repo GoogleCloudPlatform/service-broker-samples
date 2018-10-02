@@ -34,10 +34,11 @@ public class LinkInfoService {
   private String allowedUrlSuffix;
 
   @Autowired
-  private SafebrowsingService safeBrowsing;
+  private SafebrowsingService safebrowsingService;
 
   /**
    * Get information about the given link.
+   *
    * @param link the link to get information for
    * @return data to augment the link, if the link is not local.
    */
@@ -47,11 +48,10 @@ public class LinkInfoService {
     final String url = link.getUrl();
 
     final LinkInfo output = new LinkInfo();
-    final boolean isLocal = isLocal(url);
-    output.setLocal(isLocal);
+    output.setLocal(isLocal(url));
 
-    if(!isLocal) {
-      output.setThreatStatus(safeBrowsing.threatStatus(url));
+    if (!output.isLocal()) {
+      output.setThreatStatus(safebrowsingService.threatStatus(url));
     }
 
     return output;
@@ -59,6 +59,7 @@ public class LinkInfoService {
 
   /**
    * isLocal determines if the given URL is local to the domain (ends with allowedUrlSuffix).
+   *
    * @param url the URL to check.
    * @return true if the url ends with allowedUrlSuffix, false if the URL is bad or does not.
    */
@@ -69,7 +70,7 @@ public class LinkInfoService {
       return new URL(url)
           .getHost()
           .endsWith(allowedUrlSuffix);
-    } catch(MalformedURLException e) {
+    } catch (MalformedURLException e) {
       return false; // return false for safety
     }
   }

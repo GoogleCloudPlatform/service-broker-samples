@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <title>Enterprise URL Shortener</title>
-  <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
   <script src="/assets/js/vue.min.js"></script>
   <script src="/assets/js/jquery-3.3.1.min.js"></script>
 </head>
-<body >
+<body>
 
 <div class="jumbotron jumbotron-fluid bg-primary text-white">
   <div class="container">
@@ -25,7 +25,7 @@
 
   <hr>
   <h2>Create or modify a link</h2>
-    <div v-if="saved" class="alert alert-success">Link saved!</div>
+  <div v-if="saved" class="alert alert-success">Link saved as {{fulllink}}</div>
 
   <form v-on:submit.prevent>
     <div class="form-group">
@@ -35,19 +35,26 @@
           <span class="input-group-text">{{shortlinkPrefix}}</span>
         </div>
 
-        <input v-model.trim="shortlink" type="text" class="form-control" id="stubInput" aria-describedby="stubHelp" placeholder="Enter your shortlink">
+        <input v-model.trim="shortlink" type="text" class="form-control" id="stubInput"
+               aria-describedby="stubHelp" placeholder="Enter your shortlink">
       </div>
-      <small id="stubHelp" class="form-text text-muted">Shortlinks can contain letters, numbers, dashes and underscores.</small>
+      <small id="stubHelp" class="form-text text-muted">Shortlinks can contain letters, numbers,
+        dashes and underscores.
+      </small>
     </div>
     <div class="form-group">
       <label for="urlInput">URL</label>
-      <input v-model.trim="url" type="url" class="form-control" id="urlInput" placeholder="https://...">
+      <input v-model.trim="url" type="url" class="form-control" id="urlInput"
+             placeholder="https://...">
     </div>
-    <button v-on:click="save" class="btn btn-success" :disabled="invalid" v-bind:class="{disabled: invalid}">Save</button>
+    <button v-on:click="save" class="btn btn-success" :disabled="invalid"
+            v-bind:class="{disabled: invalid}">Save
+    </button>
   </form>
-  </div>
+</div>
 
 <script type="text/javascript">
+  'use strict';
 
   function getUrlParam(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -55,7 +62,6 @@
     var results = regex.exec(location.search);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   };
-
 
   new Vue({
     el: '#app',
@@ -65,44 +71,46 @@
       saved: false
     },
     watch: {
-      shortlink: function(val) {
-        saved = false
+      shortlink: function () {
+        this.saved = false;
       },
-      url: function(val) {
-        saved = false
+      url: function () {
+        this.saved = false;
       }
     },
     computed: {
-      invalid: function() {
+      invalid: function () {
         var shortlinkIsValid = /^[A-Za-z0-9_-]+$/.test(this.shortlink)
         return !(shortlinkIsValid) || this.url == "";
       },
-      shortlinkPrefix: function() {
+      shortlinkPrefix: function () {
         return "https://" + document.location.hostname + "/";
       },
-      fulllink: function() {
-        return this.shortlinkPrefix + "/" + this.shortlink;
+      fulllink: function () {
+        return this.shortlinkPrefix + this.shortlink;
       }
     },
-    created: function() {
-      param = getUrlParam('edit')
-      if(param !== '') {
+    created: function () {
+      var param = getUrlParam('edit');
+      if (param !== '') {
         this.shortlink = param;
         self = this;
-        $.get('/api/v1/links/' + param, function(results) {
+        $.get('/api/v1/links/' + param, function (results) {
           self.url = results.url;
         })
       }
     },
     methods: {
-      save: function(event) {
-        console.log("saving")
-
+      save: function () {
+        console.log("saving");
+        self = this;
         $.ajax('/api/v1/links/', {
           type: 'post',
-          contentType : 'application/json',
-          data: JSON.stringify({'url':this.url, 'stub': this.shortlink}),
-          success: function() {self.saved = true}
+          contentType: 'application/json',
+          data: JSON.stringify({'url': this.url, 'stub': this.shortlink}),
+          success: function () {
+            self.saved = true
+          }
         })
       }
     }

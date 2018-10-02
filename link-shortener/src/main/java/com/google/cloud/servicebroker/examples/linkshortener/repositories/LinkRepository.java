@@ -20,7 +20,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * LinkRepository stores the shortened links for URLs
+ * LinkRepository stores the shortened links for URLs.
  */
 @Repository
 public interface LinkRepository extends CrudRepository<Link, String> {

@@ -3,7 +3,7 @@
 This example Spring application is an enterprise-ready link-shortener.
 The URL shortener has the following behaviour:
  
- * URLs internal to your own domain (via the `shortener.internal.domain` application variable) get redirected to.
+ * URLs internal to your own domain get automatically redirected.
  * URLs on the Internet get vulnerability scanned:
    * If the URL is malicious, the redirect is blocked.
    * If the URL is benign, the user is shown a preview of the site and clicking through opens in a new tab to protect privacy.
@@ -32,13 +32,15 @@ You can add the API token to the `google.api.key` field in `application.properti
 You can setup the environment using:
 
 ```bash
+# Create the service:
 $ cf create-service google-cloudsql-mysql mysql-db-g1-small short-links-db
+# Wait for it to spin up by repeatedly running:
 $ cf service short-links-db
+# Bind it when ready
 $ cf bind-service link-shortener short-links-db -c '{"role":"cloudsql.editor"}'
 ```
 
 Edit the manifest.yml file to add your API key.
-
 
 You can build and deploy the app using:
 

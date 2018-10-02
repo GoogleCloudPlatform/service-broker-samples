@@ -17,16 +17,19 @@ package com.google.cloud.servicebroker.examples.linkshortener.beans;
 
 import com.google.cloud.servicebroker.examples.linkshortener.enums.ThreatStatus;
 
+/**
+ * LinkInfo holds augmented data for links.
+ */
 public class LinkInfo {
-  private boolean isLocal;
+  private boolean local;
   private ThreatStatus threatStatus = ThreatStatus.UNKNOWN;
 
   public boolean isLocal() {
-    return isLocal;
+    return local;
   }
 
   public void setLocal(boolean local) {
-    isLocal = local;
+    this.local = local;
   }
 
   public ThreatStatus getThreatStatus() {
