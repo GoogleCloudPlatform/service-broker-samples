@@ -18,46 +18,38 @@ package com.google.cloud.servicebroker.samples.storelocator.web;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.cloud.servicebroker.samples.storelocator.data.Locatable;
 import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
-import com.google.cloud.servicebroker.samples.storelocator.service.LocationService;
+import com.google.cloud.servicebroker.samples.storelocator.data.Store;
+import com.google.cloud.servicebroker.samples.storelocator.service.StoreService;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Provides a REST API for querying {@link Locatable} objects on a geographic coordinate system.
+ * Provides a REST API for querying {@link Store} objects on a geographic coordinate system.
  */
 @RestController
-@RequestMapping("/api/v1/locations")
-public class LocationController {
+@RequestMapping("/api/v1/stores")
+public class StoreController {
 
-  private final Collection<LocationService<?>> repositories;
+  private final StoreService storeService;
 
-  public LocationController(Collection<LocationService<?>> repositories) {
-    this.repositories = requireNonNull(repositories, "repositories");
-
+  public StoreController(StoreService storeService) {
+    this.storeService = requireNonNull(storeService, "storeService");
   }
 
   /**
-   * Retrieves {@link Locatable} objects given a {@link LocationBounds}.
-   *
-   * <p>The returned result is the union of the results of each {@link LocationService}.
+   * Retrieves {@link Store} objects given a {@link LocationBounds}.
    *
    * @param bounds The bounding box to search for locations.
    * @return a {@link List} of locations inside the given bounding box.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public List<Locatable> locations(LocationBounds bounds) {
-    return repositories.stream()
-        .map(repo -> repo.findWithinBounds(bounds))
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList());
+  public List<Store> locations(LocationBounds bounds) {
+    return storeService.findWithinBounds(bounds);
   }
 }
