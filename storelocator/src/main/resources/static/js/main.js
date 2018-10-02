@@ -71,7 +71,7 @@ function initMap() {
 // Calls the backend for location objects.
 function getLocations(bounds) {
 
-  const url = "/api/v1/locations?lat1=" + bounds.getNorthEast().lat() + "&lat2="
+  const url = "/api/v1/stores?lat1=" + bounds.getNorthEast().lat() + "&lat2="
       + bounds.getSouthWest().lat() + "&lng1=" + bounds.getNorthEast().lng()
       + "&lng2=" + bounds.getSouthWest().lng();
 

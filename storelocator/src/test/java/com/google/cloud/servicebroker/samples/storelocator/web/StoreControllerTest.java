@@ -49,7 +49,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LocationControllerTest {
+public class StoreControllerTest {
 
   private static final Store store1
       = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
@@ -76,7 +76,7 @@ public class LocationControllerTest {
 
   // Creates a real instance even though we don't perform any spying.
   @SpyBean
-  LocationController locationController;
+  StoreController storeController;
 
   @MockBean
   GoogleCredentials googleCredentials;
@@ -86,7 +86,7 @@ public class LocationControllerTest {
 
     when(storeService.findWithinBounds(query1)).thenReturn(result1);
 
-    mockMvc.perform(get("/api/v1/locations")
+    mockMvc.perform(get("/api/v1/stores")
         .content(MediaType.ALL_VALUE)
         .param("lat1", Double.toString(query1.getLat1()))
         .param("lng1", Double.toString(query1.getLng1()))
@@ -105,7 +105,7 @@ public class LocationControllerTest {
 
     when(storeService.findWithinBounds(query2)).thenReturn(result2);
 
-    mockMvc.perform(get("/api/v1/locations")
+    mockMvc.perform(get("/api/v1/stores")
         .content(MediaType.ALL_VALUE)
         .param("lat1", Double.toString(query2.getLat1()))
         .param("lng1", Double.toString(query2.getLng1()))

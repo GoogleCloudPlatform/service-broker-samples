@@ -48,7 +48,7 @@ import java.util.Optional;
  * @see LocationBounds
  */
 @Table(name = TABLE_NAME)
-public class Store implements Locatable {
+public class Store {
 
   public static final String TABLE_NAME = "stores";
 
@@ -140,11 +140,6 @@ public class Store implements Locatable {
 
   public Optional<String> getPhoneNumber() {
     return Optional.ofNullable(phoneNumber);
-  }
-
-  @Override
-  public String locationType() {
-    return "store";
   }
 
   @Override

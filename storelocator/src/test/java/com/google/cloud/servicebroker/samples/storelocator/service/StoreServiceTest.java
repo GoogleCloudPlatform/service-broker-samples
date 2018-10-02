@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-public class StoreRepositoryTest {
+public class StoreServiceTest {
 
   private static final Store store1
       = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
@@ -54,7 +54,7 @@ public class StoreRepositoryTest {
   private static final LocationBounds query2 = new LocationBounds(-2, -2, 2, 2);
 
   private static final Statement statement1 = Statement.newBuilder("SELECT * FROM stores WHERE"
-      + "latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
+      + " latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
       .bind("lat1").to(-1.0)
       .bind("lat2").to(1.0)
       .bind("lng1").to(-1.0)
@@ -62,7 +62,7 @@ public class StoreRepositoryTest {
       .build();
 
   private static final Statement statement2 = Statement.newBuilder("SELECT * FROM stores WHERE"
-      + "latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
+      + " latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
       .bind("lat1").to(-2.0)
       .bind("lat2").to(2.0)
       .bind("lng1").to(-2.0)
