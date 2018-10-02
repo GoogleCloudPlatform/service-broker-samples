@@ -82,6 +82,30 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- WebJAR dependencies -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>vue</artifactId>
+      <version>2.5.16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>4.1.3</version>
+    </dependency>
+
+    <!-- Allows webjars to be accessible without the need to provide the version in the URL -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>webjars-locator</artifactId>
+      <version>0.30</version>
+    </dependency>
+
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
