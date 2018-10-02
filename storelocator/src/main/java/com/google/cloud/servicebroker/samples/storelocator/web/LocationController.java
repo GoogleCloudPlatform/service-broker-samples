@@ -21,14 +21,15 @@ import static java.util.Objects.requireNonNull;
 import com.google.cloud.servicebroker.samples.storelocator.data.Locatable;
 import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
 import com.google.cloud.servicebroker.samples.storelocator.service.LocationService;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Provides a REST API for querying {@link Locatable} objects on a geographic coordinate system.
@@ -39,7 +40,6 @@ public class LocationController {
 
   private final Collection<LocationService<?>> repositories;
 
-  @Autowired
   public LocationController(Collection<LocationService<?>> repositories) {
     this.repositories = requireNonNull(repositories, "repositories");
 
@@ -48,7 +48,7 @@ public class LocationController {
   /**
    * Retrieves {@link Locatable} objects given a {@link LocationBounds}.
    *
-   * The returned result is the union of the results of each {@link LocationService}.
+   * <p>The returned result is the union of the results of each {@link LocationService}.
    *
    * @param bounds The bounding box to search for locations.
    * @return a {@link List} of locations inside the given bounding box.

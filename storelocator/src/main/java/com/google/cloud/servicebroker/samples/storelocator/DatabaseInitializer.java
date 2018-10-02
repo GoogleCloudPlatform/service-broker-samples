@@ -19,12 +19,7 @@ package com.google.cloud.servicebroker.samples.storelocator;
 import static java.util.Objects.requireNonNull;
 
 import com.google.cloud.servicebroker.samples.storelocator.service.StoreService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +27,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.cloud.gcp.data.spanner.core.admin.SpannerDatabaseAdminTemplate;
 import org.springframework.cloud.gcp.data.spanner.core.admin.SpannerSchemaUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * CommandLineRunner which creates the backing database and tables on startup.
@@ -51,7 +53,8 @@ public class DatabaseInitializer implements CommandLineRunner {
       SpannerDatabaseAdminTemplate spannerDatabaseAdminTemplate,
       StoreService storeService) {
     this.spannerSchemaUtils = requireNonNull(spannerSchemaUtils, "spannerSchemaUtils");
-    this.spannerDatabaseAdminTemplate = requireNonNull(spannerDatabaseAdminTemplate, "spannerDatabaseAdminTemplate");
+    this.spannerDatabaseAdminTemplate = requireNonNull(spannerDatabaseAdminTemplate,
+        "spannerDatabaseAdminTemplate");
     this.storeService = requireNonNull(storeService, "storeService");
   }
 
@@ -61,20 +64,20 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     // In rare cases, Spanner operations will always fail with retryable error codes.
     // This can cause the Spring application to hang indefinitely.
-    // Using an ExecutorService here gives more assurance that the app will gracefully fail on error.
+    // An ExecutorService here gives more assurance that the app will gracefully fail on error.
     final ExecutorService executor = Executors.newCachedThreadPool();
     final Future future = executor.submit(
         () -> storeService.initializeTable(spannerDatabaseAdminTemplate, spannerSchemaUtils));
     try {
       future.get(15, TimeUnit.SECONDS);
-    } catch (TimeoutException e) {
+    } catch (TimeoutException ex) {
       LOGGER.error("Timeout initializing Spanner tables. Assuming they are unreachable.");
       LOGGER.error("Increase log level to check if retryable errors are incurring indefinitely.");
-      throw new RuntimeException("Exception while initializing Spanner tables", e);
+      throw new RuntimeException("Exception while initializing Spanner tables", ex);
     } catch (InterruptedException ignored) {
       // Ignore. Assume the application is already shutting down.
-    } catch (ExecutionException e) {
-      throw new RuntimeException("Exception while initializing Spanner tables", e);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException("Exception while initializing Spanner tables", ex);
     } finally {
       future.cancel(true);
     }

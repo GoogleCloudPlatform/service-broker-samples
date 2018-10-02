@@ -32,10 +32,15 @@ public class StoreTest {
   @Autowired
   private JacksonTester<Store> json;
 
-  private final Store jsonObject = new Store(123.4, -30.35, "store-name", "store-address", null, "open", "close", "num");
+  private final Store jsonObject
+      = new Store(123.4, -30.35, "store-name", "store-address", null, "open", "close", "num");
 
-  /** field "locationType" inherited from {@link Locatable} interface */
-  private final String jsonString = "{\"name\":\"store-name\",\"address\":\"store-address\",\"latitude\":123.4,\"longitude\":-30.35,\"locationType\":\"store\",\"website\":null,\"openingTime\":\"open\",\"closingTime\":\"close\",\"phoneNumber\":\"num\"}";
+  /**
+   * field "locationType" inherited from {@link Locatable} interface.
+   */
+  private final String jsonString = "{\"name\":\"store-name\",\"address\":\"store-address\","
+      + "\"latitude\":123.4,\"longitude\":-30.35,\"locationType\":\"store\",\"website\":null,"
+      + "\"openingTime\":\"open\",\"closingTime\":\"close\",\"phoneNumber\":\"num\"}";
 
   @Test
   public void testSerialize() throws Exception {

@@ -22,6 +22,7 @@ import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
 import com.google.cloud.servicebroker.samples.storelocator.data.Store;
 import com.google.cloud.servicebroker.samples.storelocator.repository.StoreRepository;
 import com.google.cloud.spanner.Statement;
+
 import org.springframework.stereotype.Component;
 
 @Component

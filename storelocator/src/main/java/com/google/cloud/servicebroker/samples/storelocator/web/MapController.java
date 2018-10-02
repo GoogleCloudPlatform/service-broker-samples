@@ -24,11 +24,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * Provides a templated landing page for the store locator application.
  *
- * HTML resources are templated with Thymeleaf, relying on the {@link ThymeleafAutoConfiguration}.
+ * <p>HTML resources are Thymeleaf templates, relying on the {@link ThymeleafAutoConfiguration}.
  */
 @Controller
 public class MapController {
 
+  /**
+   * Returns the index page, templated with Thymeleaf.
+   *
+   * @return the index page.
+   */
   @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
   public String index() {
     return "index";
