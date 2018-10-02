@@ -30,7 +30,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
- * ScreenshotServices uses Google's Pagespeed API to
+ * ScreenshotServices uses Google's Pagespeed API to get a JPEG of a page.
  */
 @Service
 public class ScreenshotService {

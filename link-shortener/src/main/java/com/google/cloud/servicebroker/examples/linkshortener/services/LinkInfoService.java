@@ -20,6 +20,8 @@ import com.google.cloud.servicebroker.examples.linkshortener.beans.LinkInfo;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LinkInfoService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(LinkInfoService.class);
 
   @Value("${shortener.internal.domain}")
   private String allowedUrlSuffix;
@@ -71,6 +75,7 @@ public class LinkInfoService {
           .getHost()
           .endsWith(allowedUrlSuffix);
     } catch (MalformedURLException e) {
+      LOG.error("couldn't parse URL", e);
       return false; // return false for safety
     }
   }
