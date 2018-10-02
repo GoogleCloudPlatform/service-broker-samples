@@ -59,6 +59,6 @@ $ cf push -p target/spring-boot-example-linkshortener-0.0.1-SNAPSHOT.jar
 
 This application uses the following OSS client-side technologies:
 
-* Vue.js - MIT License
-* Bootstrap - MIT License
-* jQuery - MIT License
+* [Bootstrap](https://getbootstrap.com/) - MIT License
+* [jQuery](https://jquery.com/) - MIT License
+* [Vue.js](https://vuejs.org/) - MIT License
