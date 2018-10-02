@@ -59,19 +59,17 @@
   /*<![CDATA[*/
 
   state = {
-    map: /*[[${@storeLocatorProperties.getMap()}]]*/ {},
-    google_results: /*[[${@storeLocatorProperties.getGoogleResults()}]]*/ {}
+    map: /*[[${@storeLocatorProperties.getGoogleMap()}]]*/ {},
   };
 
   /*]]>*/
 
 </script>
-
-<script src="/webjars/vue/vue.js"></script>
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=NO_KEY&callback=initMap"
-        th:src="@{https://maps.googleapis.com/maps/api/js(key=${@storeLocatorProperties.getMap().getKey()},callback='initMap',libraries='places')}"
+        th:src="@{https://maps.googleapis.com/maps/api/js(key=${@storeLocatorProperties.getGoogleMap().getKey()},callback='initMap',libraries='places')}"
         async defer></script>
+<script src="/webjars/vue/vue.js"></script>
 <script src="/js/main.js" th:inline="javascript"></script>
 
 </body>
