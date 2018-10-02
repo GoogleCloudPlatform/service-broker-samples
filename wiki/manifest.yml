@@ -1,0 +1,7 @@
+---
+applications:
+- name: wiki
+  memory: 1024M
+  instances: 1
+  env:
+	
