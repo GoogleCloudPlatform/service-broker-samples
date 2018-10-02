@@ -18,6 +18,7 @@ package com.google.cloud.servicebroker.samples.storelocator.repository;
 
 import com.google.cloud.servicebroker.samples.storelocator.data.Store;
 import com.google.cloud.spanner.Key;
+
 import org.springframework.cloud.gcp.data.spanner.repository.SpannerRepository;
 
 /**

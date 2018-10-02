@@ -16,9 +16,10 @@
 
 package com.google.cloud.servicebroker.samples.storelocator.data;
 
+import com.google.common.base.MoreObjects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -27,8 +28,22 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class LocationBounds {
 
-  private final double lat1, lng1, lat2, lng2;
+  private final double lat1;
+  private final double lng1;
+  private final double lat2;
+  private final double lng2;
 
+  /**
+   * Creates a LocationBox given two coordinate pairs.
+   *
+   * <p>The smaller latitude and longitude vaues will always be assigned to lat1 and lng1
+   * respectively.
+   *
+   * @param lat1 latitude of first coordinate pair.
+   * @param lng1 longitude of first coordinate pair.
+   * @param lat2 latitude of second coordinate pair.
+   * @param lng2 longitude of second coordinate pair.
+   */
   @JsonCreator
   public LocationBounds(
       @JsonProperty("lat1") double lat1,
@@ -58,16 +73,16 @@ public class LocationBounds {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
 
-    if (o == null || getClass() != o.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
 
-    LocationBounds that = (LocationBounds) o;
+    LocationBounds that = (LocationBounds) obj;
 
     return new EqualsBuilder()
         .append(lat1, that.lat1)

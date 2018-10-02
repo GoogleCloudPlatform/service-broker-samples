@@ -30,10 +30,10 @@ public interface Locatable {
   /**
    * Returns a location type String, meant for distinguishing between implementations.
    *
-   * Locatable objects are expected to be serialized to JSON. Including a type field will help
+   * <p>Locatable objects are expected to be serialized to JSON. Including a type field will help
    * clients distinguish how to render different JSON objects.
    *
-   * By default this is the classname of the implementation.
+   * <p>By default this is the classname of the implementation.
    *
    * @return a type String
    */

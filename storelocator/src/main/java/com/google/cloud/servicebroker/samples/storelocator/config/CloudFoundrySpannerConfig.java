@@ -18,10 +18,7 @@ package com.google.cloud.servicebroker.samples.storelocator.config;
 
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Base64;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,6 +27,11 @@ import org.springframework.cloud.gcp.autoconfigure.spanner.GcpSpannerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 
 /**
  * Spanner Configuration for deploying on Cloud Foundry.
@@ -45,7 +47,7 @@ public class CloudFoundrySpannerConfig {
    *
    * @param gcpSpannerProperties Spanner properties configuration
    * @return GoogleCredentials for Spanner
-   * @throws IOException when GoogleCredentials creation fails due to invalid "VCAP_SERVICES" content
+   * @throws IOException when GoogleCredentials creation fails due to invalid content
    */
   @Bean
   public GoogleCredentials spannerCredentials(GcpSpannerProperties gcpSpannerProperties)
@@ -70,7 +72,7 @@ public class CloudFoundrySpannerConfig {
   /**
    * Supplies a CredentialsProvider to the {@link GcpSpannerAutoConfiguration}.
    *
-   * This ensuyres the spannerCredentials bean is used.
+   * <p>This ensures the spannerCredentials bean is used.
    *
    * @param credentials the spannerCredentials bean
    * @return A provider for the spannerCredentials bean

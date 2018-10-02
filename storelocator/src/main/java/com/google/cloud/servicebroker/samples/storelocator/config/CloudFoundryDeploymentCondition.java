@@ -17,6 +17,7 @@
 package com.google.cloud.servicebroker.samples.storelocator.config;
 
 import com.google.common.base.Strings;
+
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
@@ -26,10 +27,10 @@ import org.springframework.lang.NonNull;
 /**
  * Spring config {@link Condition} for Cloud Foundry deployments.
  *
- * Checks for the "VCAP_APPLICATION" environment variable, which is assumed to exist in
+ * <p>Checks for the "VCAP_APPLICATION" environment variable, which is assumed to exist in
  * Cloud Foundry app environments.
  *
- * Use as the target class on {@link Conditional} configurations.
+ * <p>Use as the target class on {@link Conditional} configurations.
  */
 public class CloudFoundryDeploymentCondition implements Condition {
 

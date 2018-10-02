@@ -18,6 +18,7 @@ package com.google.cloud.servicebroker.samples.storelocator.service;
 
 import com.google.cloud.servicebroker.samples.storelocator.data.Locatable;
 import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
+
 import java.util.Collection;
 
 /**

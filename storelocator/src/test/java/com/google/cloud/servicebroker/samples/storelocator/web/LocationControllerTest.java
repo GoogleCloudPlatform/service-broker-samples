@@ -19,7 +19,6 @@ package com.google.cloud.servicebroker.samples.storelocator.web;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.api.gax.core.CredentialsProvider;
@@ -27,9 +26,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
 import com.google.cloud.servicebroker.samples.storelocator.data.Store;
 import com.google.cloud.servicebroker.samples.storelocator.service.StoreService;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +42,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class LocationControllerTest {
 
-  private static final Store store1 = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store2 = new Store(-1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store3 = new Store(1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store4 = new Store(-1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store5 = new Store(1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store1
+      = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store2
+      = new Store(-1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store3
+      = new Store(1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store4
+      = new Store(-1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store5
+      = new Store(1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
 
   private static final LocationBounds query1 = new LocationBounds(-1, -1, 1, 1);
   private static final LocationBounds query2 = new LocationBounds(-2, -2, 2, 2);
@@ -89,7 +95,8 @@ public class LocationControllerTest {
     )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(content().json("[{\"name\":\"1\",\"address\":\"1\",\"latitude\":0.0,\"longitude\":0.0}]"));
+        .andExpect(content().json(
+            "[{\"name\":\"1\",\"address\":\"1\",\"latitude\":0.0,\"longitude\":0.0}]"));
     ;
   }
 
@@ -107,7 +114,12 @@ public class LocationControllerTest {
     )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(content().json("[{\"name\":\"1\",\"address\":\"1\",\"latitude\":0.0,\"longitude\":0.0},{\"name\":\"1\",\"address\":\"1\",\"latitude\":-1.0,\"longitude\":-1.0},{\"name\":\"1\",\"address\":\"1\",\"latitude\":1.0,\"longitude\":1.0},{\"name\":\"1\",\"address\":\"1\",\"latitude\":-1.0,\"longitude\":1.0},{\"name\":\"1\",\"address\":\"1\",\"latitude\":1.0,\"longitude\":-1.0}]"));
+        .andExpect(content().json(
+            "[{\"name\":\"1\",\"address\":\"1\",\"latitude\":0.0,\"longitude\":0.0},"
+                + "{\"name\":\"1\",\"address\":\"1\",\"latitude\":-1.0,\"longitude\":-1.0},"
+                + "{\"name\":\"1\",\"address\":\"1\",\"latitude\":1.0,\"longitude\":1.0},"
+                + "{\"name\":\"1\",\"address\":\"1\",\"latitude\":-1.0,\"longitude\":1.0},"
+                + "{\"name\":\"1\",\"address\":\"1\",\"latitude\":1.0,\"longitude\":-1.0}]"));
     ;
   }
 
@@ -117,7 +129,7 @@ public class LocationControllerTest {
     /**
      * Creates a CredentialsProvider using a mock credentials bean.
      *
-     * This allows the context to load.
+     * <p>This allows the context to load.
      * @param credentials mock credentials
      * @return a CredentialsProvider for the mock credentials.
      */
@@ -129,11 +141,12 @@ public class LocationControllerTest {
     /**
      * Creates a RequestMappingHandlerAdapter which supports JSON
      *
-     * When using AutoConfigureMockMvc, a reflective instance of a RequestMappingHandlerAdapter is instantiated.
+     * <p>When using AutoConfigureMockMvc, a reflective instance of a RequestMappingHandlerAdapter
+     * is instantiated.
      * This means it will only be configured to use its default message converters, which do not
      * support JSON.
      *
-     * This is contrary to an actual launch of the application.
+     * <p>This is contrary to an actual launch of the application.
      * Normally, the WebMvcConfigurationSupport's RequestMappingHandlerAdapter bean is used,
      * which support JSON.
      *

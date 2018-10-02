@@ -18,31 +18,34 @@ package com.google.cloud.servicebroker.samples.storelocator.data;
 
 import static com.google.cloud.servicebroker.samples.storelocator.data.Store.TABLE_NAME;
 
+import com.google.common.base.MoreObjects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
-import java.net.URL;
-import java.util.Optional;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Column;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.PrimaryKey;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Table;
 
+import java.net.URL;
+import java.util.Optional;
+
 /**
  * An entity object representing a simplified store location.
- * <p>
- * This object was heavily inspired by the Google Maps API Places resource.
+ *
+ * <p>This object was heavily inspired by the Google Maps API Places resource.
  * See https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult
- * <p>
- * Only the latitude and longitude are used as the primary key.
+ *
+ * <p>Only the latitude and longitude are used as the primary key.
  * This makes it trivial to create search queries using a coordinate bounding box.
- * <p>
- * For real use, this entity should be updated or replaced with a better defined and stronger typed model.
- * Many of the fields have been simplified for demonstration purposes.
+ *
+ * <p>For real use, this entity should be updated or replaced with a better defined and stronger
+ * typed model. Many of the fields have been simplified for demonstration purposes.
  * For example, the openingTime and closingTime fields are a gross approximation of the model
  * required to accurately portray a business location's hour of operations.
- * Many of the fields are simply typed to String, such as phoneNumber. This is again for the simplicity of demonstration.
+ * Many of the fields are simply typed to String, such as phoneNumber.
+ * This is again for the simplicity of demonstration.
  *
  * @see LocationBounds
  */
@@ -77,6 +80,18 @@ public class Store implements Locatable {
   @Column(name = "phoneNumber")
   private final String phoneNumber;
 
+  /**
+   * Creates a Store.
+   *
+   * @param latitude the store's latitude.
+   * @param longitude the store's longitude.
+   * @param name the name of the store. Can be null.
+   * @param address the address of the store. Can be null.
+   * @param website The website URL of the store. Can be null.
+   * @param openingTime The opening time of the store. Can be null.
+   * @param closingTime The closing time of the store. Can be null.
+   * @param phoneNumber The store's phone number. Can be null.
+   */
   @JsonCreator
   public Store(
       @JsonProperty("latitude") double latitude,
@@ -135,16 +150,16 @@ public class Store implements Locatable {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
 
-    if (o == null || getClass() != o.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
 
-    Store store = (Store) o;
+    Store store = (Store) obj;
 
     return new EqualsBuilder()
         .append(latitude, store.latitude)

@@ -24,9 +24,7 @@ import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
 import com.google.cloud.servicebroker.samples.storelocator.data.Store;
 import com.google.cloud.servicebroker.samples.storelocator.repository.StoreRepository;
 import com.google.cloud.spanner.Statement;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,26 +32,37 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.gcp.data.spanner.core.SpannerOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 public class StoreRepositoryTest {
 
-  private static final Store store1 = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store2 = new Store(-1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store3 = new Store(1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store4 = new Store(-1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
-  private static final Store store5 = new Store(1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store1
+      = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store2
+      = new Store(-1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store3
+      = new Store(1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store4
+      = new Store(-1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+  private static final Store store5
+      = new Store(1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
 
   private static final LocationBounds query1 = new LocationBounds(-1, -1, 1, 1);
   private static final LocationBounds query2 = new LocationBounds(-2, -2, 2, 2);
 
-  private static final Statement statement1 = Statement.newBuilder("SELECT * FROM stores WHERE latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
+  private static final Statement statement1 = Statement.newBuilder("SELECT * FROM stores WHERE"
+      + "latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
       .bind("lat1").to(-1.0)
       .bind("lat2").to(1.0)
       .bind("lng1").to(-1.0)
       .bind("lng2").to(1.0)
       .build();
 
-  private static final Statement statement2 = Statement.newBuilder("SELECT * FROM stores WHERE latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
+  private static final Statement statement2 = Statement.newBuilder("SELECT * FROM stores WHERE"
+      + "latitude BETWEEN @lat1 AND @lat2 AND longitude BETWEEN @lng1 AND @lng2")
       .bind("lat1").to(-2.0)
       .bind("lat2").to(2.0)
       .bind("lng1").to(-2.0)
