@@ -43,9 +43,18 @@ const markerIcon = {
 
 // Callback function for the Google Maps script.
 function initMap() {
+
+  // Attempt to get the user's location.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      state.map.lat = position.coords.latitude;
+      state.map.lng = position.coords.longitude;
+    });
+  }
+  
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: state.map.lat, lng: state.map.lng},
-    zoom: state.map.zoom,
+    zoom: state.map.zoomLevel,
   });
 
   placesService = new google.maps.places.PlacesService(map);

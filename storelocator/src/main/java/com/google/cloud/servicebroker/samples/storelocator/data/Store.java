@@ -18,12 +18,11 @@ package com.google.cloud.servicebroker.samples.storelocator.data;
 
 import static com.google.cloud.servicebroker.samples.storelocator.data.Store.TABLE_NAME;
 
-import com.google.common.base.MoreObjects;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Column;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.PrimaryKey;
 import org.springframework.cloud.gcp.data.spanner.core.mapping.Table;
@@ -41,11 +40,10 @@ import java.util.Optional;
  * This makes it trivial to create search queries using a coordinate bounding box.
  *
  * <p>For real use, this entity should be updated or replaced with a better defined and stronger
- * typed model. Many of the fields have been simplified for demonstration purposes.
- * For example, the openingTime and closingTime fields are a gross approximation of the model
- * required to accurately portray a business location's hour of operations.
- * Many of the fields are simply typed to String, such as phoneNumber.
- * This is again for the simplicity of demonstration.
+ * typed model. Many of the fields have been simplified for demonstration purposes. For example, the
+ * openingTime and closingTime fields are a gross approximation of the model required to accurately
+ * portray a business location's hour of operations. Many of the fields are simply typed to String,
+ * such as phoneNumber. This is again for the simplicity of demonstration.
  *
  * @see LocationBounds
  */
@@ -151,53 +149,16 @@ public class Store implements Locatable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-
-    Store store = (Store) obj;
-
-    return new EqualsBuilder()
-        .append(latitude, store.latitude)
-        .append(longitude, store.longitude)
-        .append(name, store.name)
-        .append(address, store.address)
-        .append(website, store.website)
-        .append(openingTime, store.openingTime)
-        .append(closingTime, store.closingTime)
-        .append(phoneNumber, store.phoneNumber)
-        .isEquals();
+    return EqualsBuilder.reflectionEquals(this, obj);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .append(latitude)
-        .append(longitude)
-        .append(name)
-        .append(address)
-        .append(website)
-        .append(openingTime)
-        .append(closingTime)
-        .append(phoneNumber)
-        .toHashCode();
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("latitude", latitude)
-        .add("longitude", longitude)
-        .add("name", name)
-        .add("address", address)
-        .add("website", website)
-        .add("openingTime", openingTime)
-        .add("closingTime", closingTime)
-        .add("phoneNumber", phoneNumber)
-        .toString();
+    return ToStringBuilder.reflectionToString(this);
   }
 }

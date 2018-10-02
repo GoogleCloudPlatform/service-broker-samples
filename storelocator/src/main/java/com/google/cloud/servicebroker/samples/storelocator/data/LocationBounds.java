@@ -16,12 +16,11 @@
 
 package com.google.cloud.servicebroker.samples.storelocator.data;
 
-import com.google.common.base.MoreObjects;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Two-dimensional bounding box for finding locations on a geographic coordinate system.
@@ -36,7 +35,7 @@ public class LocationBounds {
   /**
    * Creates a LocationBox given two coordinate pairs.
    *
-   * <p>The smaller latitude and longitude vaues will always be assigned to lat1 and lng1
+   * <p>The smaller latitude and longitude values will always be assigned to lat1 and lng1
    * respectively.
    *
    * @param lat1 latitude of first coordinate pair.
@@ -74,42 +73,17 @@ public class LocationBounds {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-
-    LocationBounds that = (LocationBounds) obj;
-
-    return new EqualsBuilder()
-        .append(lat1, that.lat1)
-        .append(lng1, that.lng1)
-        .append(lat2, that.lat2)
-        .append(lng2, that.lng2)
-        .isEquals();
+    return EqualsBuilder.reflectionEquals(this, obj);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .append(lat1)
-        .append(lng1)
-        .append(lat2)
-        .append(lng2)
-        .toHashCode();
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("lat1", lat1)
-        .add("lng1", lng1)
-        .add("lat2", lat2)
-        .add("lng2", lng2)
-        .toString();
+    return ToStringBuilder.reflectionToString(this);
   }
 }
 

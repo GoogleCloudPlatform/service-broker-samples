@@ -28,7 +28,7 @@ Store Locator is a Spring Boot Application which displays store locations on a m
  
 # Technologies Showcased
 * [Google Spanner](https://cloud.google.com/spanner/)
-* [Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/tutorial)
+* [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/tutorial)
 
 # Open Source Client-Side Technologies Used
 * [Bootstrap](https://getbootstrap.com/) - MIT License

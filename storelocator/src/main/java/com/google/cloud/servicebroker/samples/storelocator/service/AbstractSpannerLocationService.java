@@ -21,7 +21,6 @@ import static java.util.Objects.requireNonNull;
 import com.google.cloud.servicebroker.samples.storelocator.data.Locatable;
 import com.google.cloud.servicebroker.samples.storelocator.data.LocationBounds;
 import com.google.cloud.servicebroker.samples.storelocator.data.Store;
-import com.google.cloud.servicebroker.samples.storelocator.repository.StoreRepository;
 import com.google.cloud.spanner.Key;
 import com.google.cloud.spanner.Statement;
 
@@ -42,7 +41,8 @@ import java.util.List;
 public abstract class AbstractSpannerLocationService<S extends Locatable>
     implements LocationService<S> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(StoreRepository.class);
+  private static final Logger LOGGER
+      = LoggerFactory.getLogger(AbstractSpannerLocationService.class);
 
   private final SpannerRepository<S, Key> locationRepository;
   private final String tableName;
