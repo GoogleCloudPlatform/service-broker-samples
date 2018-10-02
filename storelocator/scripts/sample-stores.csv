@@ -1,0 +1,5 @@
+latitude,longitude,name,address,website,openingTime,closingTime,phoneNumber
+FLOAT64,FLOAT64,STRING(MAX),STRING(MAX),STRING(MAX),STRING(MAX),STRING(MAX),STRING(MAX)
+47.6419389,-122.3479717,Matt's cool shop,123 cool street drive,https://www.google.com,6:00 AM,5:30 PM,(555) - 555 - 5555
+47.6519389,-122.5479717,Super Sweet Cafe,1826 SW green ave,https://www.google.com,8:00 AM,8:00 PM,(555) - 555 - 5555
+47.647011,-122.3450999,A Google building,192 West Google Drive,https://www.google.com,8:00 AM,8:00 PM,(555) - 555 - 5555
