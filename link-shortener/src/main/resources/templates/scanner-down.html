@@ -19,7 +19,8 @@
       This link leaves your organization and goes to a public Internet site.
       Open it at your own risk.
     </p>
-    <img th:src="@{${'/api/v1/links/' + link.stub + '/preview'}}" class="mx-auto d-block img-thumbnail"/>
+    <img th:src="@{${'/api/v1/links/' + link.stub + '/preview'}}"
+         class="mx-auto d-block img-thumbnail"/>
     <a th:href="${link.url}" th:text="${link.url}" target="_blank" class="btn btn-primary"></a>
   </div>
 </div>

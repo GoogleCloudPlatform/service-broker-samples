@@ -15,8 +15,8 @@
  */
 package com.google.cloud.servicebroker.examples.linkshortener.services;
 
-import com.google.cloud.servicebroker.examples.linkshortener.beans.Link;
-import com.google.cloud.servicebroker.examples.linkshortener.beans.LinkInfo;
+import com.google.cloud.servicebroker.examples.linkshortener.domain.Link;
+import com.google.cloud.servicebroker.examples.linkshortener.domain.LinkInfo;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;

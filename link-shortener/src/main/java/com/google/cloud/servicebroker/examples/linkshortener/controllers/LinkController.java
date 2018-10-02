@@ -15,8 +15,8 @@
  */
 package com.google.cloud.servicebroker.examples.linkshortener.controllers;
 
-import com.google.cloud.servicebroker.examples.linkshortener.beans.Link;
-import com.google.cloud.servicebroker.examples.linkshortener.beans.LinkInfo;
+import com.google.cloud.servicebroker.examples.linkshortener.domain.Link;
+import com.google.cloud.servicebroker.examples.linkshortener.domain.LinkInfo;
 import com.google.cloud.servicebroker.examples.linkshortener.services.LinkInfoService;
 import com.google.cloud.servicebroker.examples.linkshortener.repositories.LinkRepository;
 import com.google.cloud.servicebroker.examples.linkshortener.services.ScreenshotService;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.cloud.servicebroker.examples.linkshortener.beans;
+package com.google.cloud.servicebroker.examples.linkshortener.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
