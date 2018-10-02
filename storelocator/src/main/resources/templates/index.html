@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2018 Google LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Store Locator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <link type="text/css" rel="stylesheet" href="/webjars/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<div id="view">
+  <div id="sidebar">
+    <div id="search-area">
+      <input class="form-control" id="search" placeholder="Search for locations">
+      <div id="pac-container"></div>
+    </div>
+
+    <div id="results-list-container">
+      <ul class="list-group" id="results-list">
+        <li class="card" v-for="(item, index) in items">
+          <div v-bind:id="['result' + index]" v-on:click="highlight(index)" v-bind:class="{'result':true, 'selected-result':(index === selected)}">
+            <div class = "card-body">
+              <h3>{{ item.name }}</h3>
+            </div>
+            <div class="card-body">
+              <h6>{{ item.address }}</h6>
+              <h6>{{ item.openingTime }} - {{ item.closingTime }}</h6>
+              <h6>{{ item.phoneNumber }}</h6>
+              <h6><a v-bind:href="item.website">{{ item.website  }}</a></h6>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="map"></div>
+</div>
+
+<script th:inline="javascript">
+
+  /*<![CDATA[*/
+
+  state = {
+    map: /*[[${@storeLocatorProperties.getMap()}]]*/ {},
+    google_results: /*[[${@storeLocatorProperties.getGoogleResults()}]]*/ {}
+  };
+
+  /*]]>*/
+
+</script>
+
+<script src="/webjars/vue/vue.js"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=NO_KEY&callback=initMap"
+        th:src="@{https://maps.googleapis.com/maps/api/js(key=${@storeLocatorProperties.getMap().getKey()},callback='initMap',libraries='places')}"
+        async defer></script>
+<script src="/js/main.js" th:inline="javascript"></script>
+
+</body>
+</html>

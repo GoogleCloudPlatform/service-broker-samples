@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Path to service account key. Example: /home/me/key.json
+export GOOGLE_APPLICATION_CREDENTIALS=
+
+export GOOGLE_PROJECT_ID=
+export STORE_LOCATOR_SPANNER_INSTANCE_ID=
+export STORE_LOCATOR_SPANNER_DATABASE=
+
+# API key for maps
+export STORE_LOCATOR_MAP_KEY=
+
