@@ -17,6 +17,7 @@
 package com.google.cloud.servicebroker.samples.storelocator.data;
 
 import static com.google.cloud.servicebroker.samples.storelocator.data.Store.TABLE_NAME;
+import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,11 +55,11 @@ public class Store {
 
   @Column(name = "latitude")
   @PrimaryKey
-  private final double latitude;
+  private final Double latitude;
 
   @Column(name = "longitude")
   @PrimaryKey(keyOrder = 2)
-  private final double longitude;
+  private final Double longitude;
 
   @Column(name = "name")
   private final String name;
@@ -92,16 +93,16 @@ public class Store {
    */
   @JsonCreator
   public Store(
-      @JsonProperty("latitude") double latitude,
-      @JsonProperty("longitude") double longitude,
+      @JsonProperty("latitude") Double latitude,
+      @JsonProperty("longitude") Double longitude,
       @JsonProperty("name") String name,
       @JsonProperty("address") String address,
       @JsonProperty("website") URL website,
       @JsonProperty("openingTime") String openingTime,
       @JsonProperty("closingTime") String closingTime,
       @JsonProperty("phoneNumber") String phoneNumber) {
-    this.latitude = latitude;
-    this.longitude = longitude;
+    this.latitude = requireNonNull(latitude, "latitude");
+    this.longitude = requireNonNull(longitude, "longitude");
     this.name = name;
     this.address = address;
     this.website = website;
@@ -110,11 +111,11 @@ public class Store {
     this.phoneNumber = phoneNumber;
   }
 
-  public double getLatitude() {
+  public Double getLatitude() {
     return latitude;
   }
 
-  public double getLongitude() {
+  public Double getLongitude() {
     return longitude;
   }
 
