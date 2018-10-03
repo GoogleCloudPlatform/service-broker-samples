@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.services;
 
 import com.google.cloud.servicebroker.examples.linkshortener.domain.Link;
 import com.google.cloud.servicebroker.examples.linkshortener.domain.LinkInfo;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Objects;
 
 /**
  * LinkInfoService gets basic information about a URL.
@@ -74,8 +77,8 @@ public class LinkInfoService {
       return new URL(url)
           .getHost()
           .endsWith(allowedUrlSuffix);
-    } catch (MalformedURLException e) {
-      LOG.error("couldn't parse URL", e);
+    } catch (MalformedURLException ex) {
+      LOG.error("couldn't parse URL", ex);
       return false; // return false for safety
     }
   }

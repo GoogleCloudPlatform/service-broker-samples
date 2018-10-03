@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.services;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -25,16 +26,18 @@ import com.google.api.services.safebrowsing.model.ThreatEntry;
 import com.google.api.services.safebrowsing.model.ThreatInfo;
 import com.google.api.services.safebrowsing.model.ThreatMatch;
 import com.google.cloud.servicebroker.examples.linkshortener.enums.ThreatStatus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 /**
  * SafebrowsingService provides access to the Google Safebrowsing API which is what protects Chrome
@@ -48,7 +51,8 @@ public class SafebrowsingService {
   private final String googleApiKey;
   private final Safebrowsing client;
 
-  public SafebrowsingService(@Value("${google.api.key}") String googleApiKey) throws GeneralSecurityException, IOException {
+  SafebrowsingService(@Value("${google.api.key}") String googleApiKey)
+      throws GeneralSecurityException, IOException {
     Objects.requireNonNull(googleApiKey);
 
     this.googleApiKey = googleApiKey;
@@ -63,7 +67,7 @@ public class SafebrowsingService {
    * Returns a threat designator for a URL. A site is malicious if the Safebrowsing API returns
    * threats of any type for any platform.
    *
-   * This is NOT CACHED because threat information is always changing.
+   * <p>This is NOT CACHED because threat information is always changing.
    *
    * @param url - the URL to check
    * @return a ThreatStatus for the URL, UNKNOWN if an exception occurred on lookup.
@@ -100,8 +104,8 @@ public class SafebrowsingService {
       } else {
         return ThreatStatus.MALICIOUS;
       }
-    } catch (IOException e) {
-      LOG.error("couldn't get safebrowsing status", e);
+    } catch (IOException ex) {
+      LOG.error("couldn't get safebrowsing status", ex);
       return ThreatStatus.UNKNOWN;
     }
   }

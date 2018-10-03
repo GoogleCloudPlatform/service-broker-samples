@@ -36,15 +36,16 @@
     <div id="results-list-container">
       <ul class="list-group" id="results-list">
         <li class="card" v-for="(item, index) in items">
-          <div v-bind:id="['result' + index]" v-on:click="highlight(index)" v-bind:class="{'result':true, 'selected-result':(index === selected)}">
-            <div class = "card-body">
+          <div v-bind:id="['result' + index]" v-on:click="highlight(index)"
+               v-bind:class="{'result':true, 'selected-result':(index === selected)}">
+            <div class="card-body">
               <h3>{{ item.name }}</h3>
             </div>
             <div class="card-body">
               <h6>{{ item.address }}</h6>
               <h6>{{ item.openingTime }} - {{ item.closingTime }}</h6>
               <h6>{{ item.phoneNumber }}</h6>
-              <h6><a v-bind:href="item.website">{{ item.website  }}</a></h6>
+              <h6><a v-bind:href="item.website">{{ item.website }}</a></h6>
             </div>
           </div>
         </li>

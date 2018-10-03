@@ -11,21 +11,22 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.cloud.servicebroker.awwvision;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.api.services.storage.model.StorageObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.google.api.services.storage.model.StorageObject;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Provides request mappings for reading images from Cloud Storage.
@@ -34,27 +35,44 @@ import com.google.api.services.storage.model.StorageObject;
 public class ViewImages {
 
   @Autowired
-  private StorageAPI storageAPI;
+  private StorageApi storageApi;
 
+  /**
+   * Renders the home page.
+   *
+   * @param model The Model object.
+   * @return The home page view name.
+   * @throws IOException If the StorageApi cannot list objects.
+   */
   @RequestMapping("/")
-  public String view(Model model) throws IOException, GeneralSecurityException {
-    List<StorageObject> objects = storageAPI.listAll();
+  public String view(Model model) throws IOException {
+    List<StorageObject> objects = storageApi.listAll();
     List<Image> images = new ArrayList<>();
     for (StorageObject obj : objects) {
-      Image image = new Image(getPublicUrl(storageAPI.bucketName, obj.getName()), obj.getMetadata().get("label"));
+      Image image = new Image(getPublicUrl(storageApi.getBucketName(), obj.getName()),
+          obj.getMetadata().get("label"));
       images.add(image);
     }
     model.addAttribute("images", images);
     return "index";
   }
 
+  /**
+   * Renders a specifc label's page.
+   *
+   * @param label The label.
+   * @param model The Model object.
+   * @return The view to render.
+   * @throws IOException If the StorageApi cannot list objects.
+   */
   @RequestMapping("/label/{label}")
-  String viewLabel(@PathVariable("label") String label, Model model)
-      throws IOException, GeneralSecurityException {
-    List<StorageObject> objects = storageAPI.listAll();
+  public String viewLabel(@PathVariable("label") String label, Model model)
+      throws IOException {
+    List<StorageObject> objects = storageApi.listAll();
     List<Image> images = new ArrayList<>();
     for (StorageObject obj : objects) {
-      Image image = new Image(getPublicUrl(storageAPI.bucketName, obj.getName()), obj.getMetadata().get("label"));
+      Image image = new Image(getPublicUrl(storageApi.getBucketName(), obj.getName()),
+          obj.getMetadata().get("label"));
       if (image.label.equals(label)) {
         images.add(image);
       }
@@ -68,29 +86,45 @@ public class ViewImages {
   }
 
   static class Image {
-    private String URL;
+
+    private String url;
     private String label;
-    
-    public Image(String URL, String label) {
-      this.URL = URL;
+
+    public Image(String url, String label) {
+      this.url = url;
       this.label = label;
     }
-    
-    public String getURL() {
-      return URL;
+
+    public String getUrl() {
+      return url;
     }
-    
+
     public String getLabel() {
       return label;
     }
-    
+
     @Override
-    public boolean equals(Object object) {
-      if (!(object instanceof Image)) {
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
         return false;
       }
-      Image other = (Image) object;
-      return other.getURL().equals(getURL()) && other.getLabel().equals(getLabel());
+      Image image = (Image) obj;
+      return Objects.equals(url, image.url) && Objects.equals(label, image.label);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(url, label);
+    }
+
+    @Override
+    public String toString() {
+      return "Image{" + "url='" + url + '\''
+          + ", label='" + label + '\''
+          + '}';
     }
   }
 }

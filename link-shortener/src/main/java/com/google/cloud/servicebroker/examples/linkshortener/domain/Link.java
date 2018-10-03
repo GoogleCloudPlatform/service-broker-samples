@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.domain;
 
 import javax.persistence.Column;
@@ -29,14 +30,15 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "links")
 public class Link {
+
   @Id
-  @Column(name="stub")
+  @Column(name = "stub")
   @Pattern(regexp = "^([a-zA-Z0-9]+(-[a-zA-Z0-9+])*)$")
   private String stub;
 
-  @Column(name="url")
+  @Column(name = "url")
   @NotBlank
-  @Size(max=1024)
+  @Size(max = 1024)
   private String url;
 
   public String getStub() {

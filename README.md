@@ -1,4 +1,4 @@
-# GCP Service Broker Sample Applications
+# GCP Service Broker Sample Applications [![Build Status](https://travis-ci.org/GoogleCloudPlatform/service-broker-samples.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/service-broker-samples)
 
 This repository holds sample application which utilize GCP services via the GCP Service Broker.
 

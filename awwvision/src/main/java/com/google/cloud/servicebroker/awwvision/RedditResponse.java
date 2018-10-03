@@ -11,6 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.cloud.servicebroker.awwvision;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,18 +21,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RedditResponse {
+
   public Data data;
-  
-  public RedditResponse() {}
+
+  public RedditResponse() {
+  }
+
   public RedditResponse(Data data) {
     this.data = data;
   }
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Data {
+
     public Listing[] children;
-    
-    public Data() {}
+
+    public Data() {
+    }
+
     public Data(Listing[] children) {
       this.children = children;
     }
@@ -39,9 +46,12 @@ public class RedditResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Listing {
+
     public ListingData data;
 
-    public Listing() {}
+    public Listing() {
+    }
+
     public Listing(ListingData data) {
       this.data = data;
     }
@@ -49,10 +59,13 @@ public class RedditResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class ListingData {
+
     public Preview preview;
     public String url;
 
-    public ListingData() {}
+    public ListingData() {
+    }
+
     public ListingData(Preview preview) {
       this.preview = preview;
     }
@@ -60,9 +73,12 @@ public class RedditResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Preview {
+
     public Image[] images;
 
-    public Preview() {}
+    public Preview() {
+    }
+
     public Preview(Image[] images) {
       this.images = images;
     }
@@ -70,10 +86,13 @@ public class RedditResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Image {
+
     public Source source;
     public String id;
 
-    public Image() {}
+    public Image() {
+    }
+
     public Image(Source source, String id) {
       this.source = source;
       this.id = id;
@@ -82,9 +101,12 @@ public class RedditResponse {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class Source {
+
     public String url;
 
-    public Source() {}
+    public Source() {
+    }
+
     public Source(String url) {
       this.url = url;
     }

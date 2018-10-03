@@ -122,9 +122,12 @@ public class DatabaseInitializer implements ApplicationRunner {
   private void addTestData() throws MalformedURLException {
     LOGGER.info("Adding test data");
     Stream.of(
-        new Store(47.6419389,-122.3479717,"Matt's cool shop","123 cool street drive", new URL("https://www.google.com"),"6:00 AM","5:30 PM","(555) - 555 - 5555)"),
-        new Store(47.6519389,-122.5479717,"Super Sweet Cafe","1826 SW green ave", new URL("https://www.google.com"),"8:00 AM","8:00 PM","(555) - 555 - 5555"),
-        new Store(47.647011,-122.3450999,"A Google building","192 West Google Drive", new URL("https://www.google.com"),"8:00 AM","8:00 PM","(555) - 555 - 5555")
+        new Store(47.6419389, -122.3479717, "Matt's cool shop", "123 cool street drive",
+            new URL("https://www.google.com"), "6:00 AM", "5:30 PM", "(555) - 555 - 5555)"),
+        new Store(47.6519389, -122.5479717, "Super Sweet Cafe", "1826 SW green ave",
+            new URL("https://www.google.com"), "8:00 AM", "8:00 PM", "(555) - 555 - 5555"),
+        new Store(47.647011, -122.3450999, "A Google building", "192 West Google Drive",
+            new URL("https://www.google.com"), "8:00 AM", "8:00 PM", "(555) - 555 - 5555")
     ).forEach(storeRepository::save);
   }
 }

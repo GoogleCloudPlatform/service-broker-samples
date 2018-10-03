@@ -51,7 +51,7 @@ function initMap() {
       state.map.lng = position.coords.longitude;
     });
   }
-  
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: state.map.lat, lng: state.map.lng},
     zoom: state.map.zoomLevel,
@@ -84,7 +84,8 @@ function updateView(results) {
 
   // Find which location is selected
   let selectedName;
-  if (resultsList.selected !== -1 && resultsList.items.length > resultsList.selected) {
+  if (resultsList.selected !== -1 && resultsList.items.length
+      > resultsList.selected) {
     selectedName = resultsList.items[resultsList.selected].name
   } else {
     selectedName = null;
@@ -124,7 +125,7 @@ function updateView(results) {
       icon: markerIcon,
     });
 
-    marker.addListener('click', function() {
+    marker.addListener('click', function () {
       selectLocation(i);
     });
 
