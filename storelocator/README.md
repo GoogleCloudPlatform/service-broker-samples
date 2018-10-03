@@ -2,25 +2,13 @@
 
 Store Locator is a Spring Boot Application which displays store locations on a map.
 
-# Setup
-## Credentials
- * Get an API key for the Google Maps API
- * Get a Service Account JSON key for a Spanner instance
- * Ensure the Google Maps API and the Spanner APIs are enabled
-
-## Infrastructure
- * Create a Spanner instance.
-
 # Build
+* Get an API key for the Google Maps API
 * Edit `application.properties` appropriately. A `.envrc.template` is also provided for direnv users.
-* Cloud Foundry users will need to update `manifest.yml`
+* Update `manifest.yml` to include the Google Maps API key
 * `mvn package`
 
 # Deploy
-## Local
- * `java -jar target/store-locator-0.0.1-SNAPSHOT.jar`
- 
-## Cloud Foundry
 * `cf create-service google-spanner sandbox storelocator-spanner`
 * `cf service storelocator`
 * `cf bind-service storelocator storelocator-spanner -c '{"role":"spanner.databaseAdmin"}'`
