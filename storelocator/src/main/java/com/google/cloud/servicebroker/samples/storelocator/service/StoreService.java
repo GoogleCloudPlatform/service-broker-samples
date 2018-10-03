@@ -24,17 +24,12 @@ import com.google.cloud.servicebroker.samples.storelocator.data.Store;
 import com.google.cloud.servicebroker.samples.storelocator.repository.StoreRepository;
 import com.google.cloud.spanner.Statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class StoreService {
-
-  private static final Logger LOGGER
-      = LoggerFactory.getLogger(StoreService.class);
 
   private final StoreRepository storeRepository;
 
