@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.controllers;
 
 import com.google.cloud.servicebroker.examples.linkshortener.domain.Link;
 import com.google.cloud.servicebroker.examples.linkshortener.domain.LinkInfo;
-import com.google.cloud.servicebroker.examples.linkshortener.services.LinkInfoService;
 import com.google.cloud.servicebroker.examples.linkshortener.repositories.LinkRepository;
-import java.util.Optional;
+import com.google.cloud.servicebroker.examples.linkshortener.services.LinkInfoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Optional;
 
 /**
  * Contains the controller code for the main HTTP handlers.

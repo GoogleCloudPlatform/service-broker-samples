@@ -11,12 +11,8 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.cloud.servicebroker.awwvision;
-
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
@@ -27,20 +23,26 @@ import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 import com.google.common.collect.ImmutableList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
 /**
  * Helper methods for interacting with the Cloud Vision API.
  */
 @Component
-public class VisionAPI {
+public class VisionApi {
 
   @Autowired
   private Vision vision;
 
   /**
    * Calls the Vision API to get a single label for the given image.
+   *
    * @param bytes The image, in bytes
-   * @return The label given to the image, or null if the request could not successfully label the image
-   * @throws IOException
+   * @return The label given to the image, or null if the request could not successfully label the
+   *         image
    */
   public String labelImage(byte[] bytes) throws IOException {
     AnnotateImageRequest request =

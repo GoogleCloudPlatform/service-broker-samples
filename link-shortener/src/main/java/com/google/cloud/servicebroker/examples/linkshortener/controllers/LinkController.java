@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.controllers;
 
 import com.google.cloud.servicebroker.examples.linkshortener.domain.Link;
 import com.google.cloud.servicebroker.examples.linkshortener.domain.LinkInfo;
-import com.google.cloud.servicebroker.examples.linkshortener.services.LinkInfoService;
 import com.google.cloud.servicebroker.examples.linkshortener.repositories.LinkRepository;
+import com.google.cloud.servicebroker.examples.linkshortener.services.LinkInfoService;
 import com.google.cloud.servicebroker.examples.linkshortener.services.ScreenshotService;
-import java.io.IOException;
-import java.util.Optional;
-import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +31,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Contains controller code for the links.

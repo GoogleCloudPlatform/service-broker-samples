@@ -130,6 +130,7 @@ public class StoreControllerTest {
      * Creates a CredentialsProvider using a mock credentials bean.
      *
      * <p>This allows the context to load.
+     *
      * @param credentials mock credentials
      * @return a CredentialsProvider for the mock credentials.
      */
@@ -142,13 +143,12 @@ public class StoreControllerTest {
      * Creates a RequestMappingHandlerAdapter which supports JSON
      *
      * <p>When using AutoConfigureMockMvc, a reflective instance of a RequestMappingHandlerAdapter
-     * is instantiated.
-     * This means it will only be configured to use its default message converters, which do not
-     * support JSON.
+     * is instantiated. This means it will only be configured to use its default message converters,
+     * which do not support JSON.
      *
      * <p>This is contrary to an actual launch of the application.
-     * Normally, the WebMvcConfigurationSupport's RequestMappingHandlerAdapter bean is used,
-     * which support JSON.
+     * Normally, the WebMvcConfigurationSupport's RequestMappingHandlerAdapter bean is used, which
+     * support JSON.
      *
      * @return a RequestMappingHandlerAdapter which supports JSON.
      */

@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener.services;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.pagespeedonline.Pagespeedonline;
 import com.google.api.services.pagespeedonline.Pagespeedonline.Pagespeedapi.Runpagespeed;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * ScreenshotServices uses Google's Pagespeed API to get a JPEG of a page.
@@ -40,7 +43,7 @@ public class ScreenshotService {
   private final String googleApiKey;
   private final Pagespeedonline client;
 
-  public ScreenshotService(@Value("${google.api.key}") String googleApiKey)
+  ScreenshotService(@Value("${google.api.key}") String googleApiKey)
       throws GeneralSecurityException, IOException {
     Objects.requireNonNull(googleApiKey);
     this.googleApiKey = googleApiKey;
@@ -52,6 +55,11 @@ public class ScreenshotService {
         .build();
   }
 
+  /**
+   * Creates and caches a JPEG screenshot of a given URL.
+   * @param url the URL.
+   * @return A JPEG screenshot byte array.
+   */
   @Cacheable("screenshot-service")
   public byte[] getScreenshot(String url) {
     try {
@@ -61,8 +69,8 @@ public class ScreenshotService {
 
       return request.execute().getScreenshot().decodeData();
 
-    } catch (IOException e) {
-      LOG.error("Couldn't get screenshot", e);
+    } catch (IOException ex) {
+      LOG.error("Couldn't get screenshot", ex);
       return new byte[]{};
     }
   }

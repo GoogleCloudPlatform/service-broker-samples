@@ -11,11 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.cloud.servicebroker.awwvision;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
+import com.google.api.services.storage.model.StorageObject;
+import com.google.cloud.servicebroker.awwvision.RedditResponse.Listing;
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -30,9 +31,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.api.services.storage.model.StorageObject;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Listing;
-import com.google.common.collect.ImmutableMap;
+import java.io.IOException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
 
 /**
  * Provides a request mapping for scraping images from reddit, labeling them with the Vision API,
@@ -44,17 +45,24 @@ public class RedditScraper {
   private static final String REDDIT_URL = "https://www.reddit.com/r/aww/hot.json";
 
   @Autowired
-  private VisionAPI visionAPI;
+  private VisionApi visionApi;
+
   @Autowired
-  private StorageAPI storageAPI;
+  private StorageApi storageApi;
 
   private final Log logger = LogFactory.getLog(getClass());
 
   @Value("${reddit-user-agent}")
   private String redditUserAgent;
 
+  /**
+   * Scrapes https://reddit.com/r/aww for cute pictures are stores them in a Storage bucket.
+   *
+   * @param restTemplate The RestTemplate.
+   * @return The view to render.
+   */
   @RequestMapping("/reddit")
-  String getRedditUrls(Model model, RestTemplate restTemplate) throws GeneralSecurityException {
+  public String getRedditUrls(RestTemplate restTemplate) {
     HttpHeaders headers = new HttpHeaders();
     headers.add(HttpHeaders.USER_AGENT, redditUserAgent);
     RedditResponse response = restTemplate
@@ -66,31 +74,31 @@ public class RedditScraper {
     return "reddit";
   }
 
-  void storeAndLabel(RedditResponse response) throws GeneralSecurityException {
+  void storeAndLabel(RedditResponse response) {
     for (Listing listing : response.data.children) {
       if (listing.data.preview != null) {
-            URL url;
-            byte[] raw;
-            try {
-              url = new URL(listing.data.url);
-              raw = download(url);
-            } catch (IOException e) {
-              logger.warn("Issue in streaming image " + listing.data.url, e);
-              continue;
+        URL url;
+        byte[] raw;
+        try {
+          url = new URL(listing.data.url);
+          raw = download(url);
+        } catch (IOException ex) {
+          logger.warn("Issue in streaming image " + listing.data.url, ex);
+          continue;
+        }
+        try {
+          // Only label and upload the image if it does not already exist in storage.
+          StorageObject existing = storageApi.get(listing.data.url);
+          if (existing == null) {
+            String label = visionApi.labelImage(raw);
+            if (label != null) {
+              storageApi.uploadJpeg(listing.data.url, url, ImmutableMap.of("label", label));
             }
-            try {
-              // Only label and upload the image if it does not already exist in storage.
-              StorageObject existing = storageAPI.get(listing.data.url);
-              if (existing == null) {
-                String label = visionAPI.labelImage(raw);
-                if (label != null) {
-                  storageAPI.uploadJpeg(listing.data.url, url, ImmutableMap.of("label", label));
-                }
-              }
-            } catch (IOException e) {
-              logger.error("Issue with labeling image " + listing.data.url, e);
-            }
-       }
+          }
+        } catch (IOException ex) {
+          logger.error("Issue with labeling image " + listing.data.url, ex);
+        }
+      }
     }
   }
 

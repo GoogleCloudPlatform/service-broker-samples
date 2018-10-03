@@ -11,19 +11,8 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.cloud.servicebroker.awwvision;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.util.Base64;
-
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -32,6 +21,18 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.util.Base64;
 
 /**
  * Sets up connections to client libraries and other injectable beans.
@@ -55,13 +56,13 @@ public class StorageConfig {
   @Bean
   GoogleCredential credential() throws IOException {
     String env = System.getenv("VCAP_SERVICES");
-    
+
     String privateKeyData =
         new JSONObject(env)
-          .getJSONArray("google-storage")
-          .getJSONObject(0)
-          .getJSONObject("credentials")
-          .getString("PrivateKeyData");
+            .getJSONArray("google-storage")
+            .getJSONObject(0)
+            .getJSONObject("credentials")
+            .getString("PrivateKeyData");
 
     InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(privateKeyData));
     return GoogleCredential.fromStream(stream);

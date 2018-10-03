@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.servicebroker.examples.linkshortener;
 
 import org.springframework.boot.SpringApplication;
@@ -23,7 +24,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class LinkShortenerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LinkShortenerApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(LinkShortenerApplication.class, args);
+  }
 }

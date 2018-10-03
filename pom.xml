@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.4.RELEASE</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.google.cloud.servicebroker.samples</groupId>
+  <artifactId>service-broker-samples</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Service Broker Samples</name>
+  <description>Sample applications which utilize GCP Services through the GCP Service Broker
+  </description>
+
+  <scm>
+    <url>https://github.com/GoogleCloudPlatform/service-broker-samples</url>
+    <connection>scm:git:git://github.com/GoogleCloudPlatform/service-broker-samples.git</connection>
+    <developerConnection>
+      scm:git:ssh://git@github.com/GoogleCloudPlatform/service-broker-samples.git
+    </developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <modules>
+    <module>awwvision</module>
+    <module>link-shortener</module>
+    <module>storelocator</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <!-- Add checkstyle -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>checkstyle-validate</id>
+            <phase>validate</phase>
+            <configuration>
+              <configLocation>google_checks.xml</configLocation>
+              <encoding>UTF-8</encoding>
+              <consoleOutput>true</consoleOutput>
+              <failsOnError>true</failsOnError>
+              <violationSeverity>warning</violationSeverity>
+            </configuration>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
