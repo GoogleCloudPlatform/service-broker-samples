@@ -32,7 +32,7 @@ public class StoreLocatorProperties {
 
   private boolean testDataEnabled;
 
-  private int databaseInitTimeoutSeconds = 30;
+  private int databaseInitTimeoutSeconds = 120;
 
   public GoogleMapProperties getGoogleMap() {
     return googleMap;
