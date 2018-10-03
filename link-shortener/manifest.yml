@@ -1,0 +1,8 @@
+---
+applications:
+- name: link-shortener
+  memory: 1024M
+  instances: 2
+  env:
+    GOOGLE_API_KEY: "YOUR_API_KEY_HERE"
+    INTERNAL_DOMAIN_SUFFIX: "YOUR_DOMAIN_HERE"
