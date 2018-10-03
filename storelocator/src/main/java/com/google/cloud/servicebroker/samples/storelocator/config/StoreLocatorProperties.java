@@ -30,6 +30,10 @@ public class StoreLocatorProperties {
 
   private GoogleMapProperties googleMap;
 
+  private boolean testDataEnabled;
+
+  private int databaseInitTimeoutSeconds = 30;
+
   public GoogleMapProperties getGoogleMap() {
     return googleMap;
   }
@@ -38,4 +42,19 @@ public class StoreLocatorProperties {
     this.googleMap = googleMap;
   }
 
+  public boolean isTestDataEnabled() {
+    return testDataEnabled;
+  }
+
+  public void setTestDataEnabled(boolean testDataEnabled) {
+    this.testDataEnabled = testDataEnabled;
+  }
+
+  public int getDatabaseInitTimeoutSeconds() {
+    return databaseInitTimeoutSeconds;
+  }
+
+  public void setDatabaseInitTimeoutSeconds(int databaseInitTimeoutSeconds) {
+    this.databaseInitTimeoutSeconds = databaseInitTimeoutSeconds;
+  }
 }

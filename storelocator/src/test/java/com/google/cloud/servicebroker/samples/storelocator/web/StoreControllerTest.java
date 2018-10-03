@@ -52,15 +52,15 @@ import java.util.List;
 public class StoreControllerTest {
 
   private static final Store store1
-      = new Store(0, 0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+      = new Store(0.0, 0.0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
   private static final Store store2
-      = new Store(-1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+      = new Store(-1.0, -1.0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
   private static final Store store3
-      = new Store(1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+      = new Store(1.0, 1.0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
   private static final Store store4
-      = new Store(-1, 1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+      = new Store(-1.0, 1.0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
   private static final Store store5
-      = new Store(1, -1, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
+      = new Store(1.0, -1.0, "1", "1", null, "6:00 AM", "6:00 PM", "(555) 555-5555");
 
   private static final LocationBounds query1 = new LocationBounds(-1, -1, 1, 1);
   private static final LocationBounds query2 = new LocationBounds(-2, -2, 2, 2);

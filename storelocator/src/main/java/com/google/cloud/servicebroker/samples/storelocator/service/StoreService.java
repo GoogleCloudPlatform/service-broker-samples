@@ -26,11 +26,8 @@ import com.google.cloud.spanner.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.gcp.data.spanner.core.admin.SpannerDatabaseAdminTemplate;
-import org.springframework.cloud.gcp.data.spanner.core.admin.SpannerSchemaUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -66,21 +63,4 @@ public class StoreService {
     return storeRepository.getSpannerTemplate().query(Store.class, buildStatement(bounds));
   }
 
-  /**
-   * Initializes the Spanner database and table.
-   *
-   * @param spannerDatabaseAdminTemplate The Spanner database Template.
-   * @param spannerSchemaUtils Spanner database utility object.
-   */
-  public void initializeTable(SpannerDatabaseAdminTemplate spannerDatabaseAdminTemplate,
-      SpannerSchemaUtils spannerSchemaUtils) {
-    if (!spannerDatabaseAdminTemplate.tableExists(Store.TABLE_NAME)) {
-      LOGGER.info("Creating database:table " + spannerDatabaseAdminTemplate.getDatabase() + ":"
-          + Store.TABLE_NAME);
-      spannerDatabaseAdminTemplate.executeDdlStrings(
-          Collections.singletonList(
-              spannerSchemaUtils.getCreateTableDDLString(Store.class)),
-          true);
-    }
-  }
 }
