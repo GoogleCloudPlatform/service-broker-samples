@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.service;
 
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.storage.Storage;
@@ -34,19 +34,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper methods for interacting with the Cloud Storage API.
+ * Component which handles the storage of cuteimages from https://reddit.com/r/aww
  *
  * <p>Uses the Cloud Storage Bucket configured in the application properties.
  */
 @Controller
-public class StorageApi {
+public class CuteImageService {
 
   @Autowired
   private Storage storageService;
 
   private final String bucketName;
 
-  StorageApi() {
+  CuteImageService() {
     String env = System.getenv("VCAP_SERVICES");
 
     this.bucketName =

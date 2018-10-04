@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.controller;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -23,16 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.model.Objects;
 import com.google.api.services.storage.model.StorageObject;
-import com.google.cloud.servicebroker.awwvision.ViewImages.Image;
-import com.google.common.collect.ImmutableList;
+import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
+import com.google.cloud.servicebroker.samples.awwvision.controller.ViewImagesController.Image;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +43,7 @@ import java.util.Arrays;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(properties = {"gcp-storage-bucket=fake-bucket"})
-public class ViewImagesTest {
+public class ViewImagesControllerTest {
 
   @MockBean
   Storage storageService;
@@ -56,7 +54,7 @@ public class ViewImagesTest {
   GoogleCredential googleCredential;
 
   @MockBean
-  StorageApi storageApi;
+  CuteImageService cuteImageService;
 
   @Autowired
   private MockMvc mvc;
@@ -70,20 +68,20 @@ public class ViewImagesTest {
     StorageObject obj2 =
         new StorageObject().setName("obj2").setMetadata(ImmutableMap.of("label", "cat"));
 
-    when(storageApi.listAll()).thenReturn(Arrays.asList(obj1, obj2));
-    when(storageApi.getBucketName()).thenReturn(BUCKET);
+    when(cuteImageService.listAll()).thenReturn(Arrays.asList(obj1, obj2));
+    when(cuteImageService.getBucketName()).thenReturn(BUCKET);
   }
 
   @Test
   public void testView() throws Exception {
-    Image img1 = new Image(ViewImages.getPublicUrl(BUCKET, "obj1"), "dog");
-    Image img2 = new Image(ViewImages.getPublicUrl(BUCKET, "obj2"), "cat");
+    Image img1 = new Image(ViewImagesController.getPublicUrl(BUCKET, "obj1"), "dog");
+    Image img2 = new Image(ViewImagesController.getPublicUrl(BUCKET, "obj2"), "cat");
     mvc.perform(get("/")).andExpect(model().attribute("images", containsInAnyOrder(img1, img2)));
   }
 
   @Test
   public void testViewLabel() throws Exception {
-    Image dog = new Image(ViewImages.getPublicUrl(BUCKET, "obj1"), "dog");
+    Image dog = new Image(ViewImagesController.getPublicUrl(BUCKET, "obj1"), "dog");
     mvc.perform(get("/label/dog")).andExpect(model().attribute("images", contains(dog)));
   }
 

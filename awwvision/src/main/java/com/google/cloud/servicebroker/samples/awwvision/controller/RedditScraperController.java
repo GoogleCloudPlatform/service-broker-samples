@@ -12,10 +12,13 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.controller;
 
 import com.google.api.services.storage.model.StorageObject;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Listing;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Listing;
+import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
+import com.google.cloud.servicebroker.samples.awwvision.service.ImageLabelingService;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
@@ -27,28 +30,27 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
+import java.util.Objects;
 
 /**
  * Provides a request mapping for scraping images from reddit, labeling them with the Vision API,
  * and storing them in Cloud Storage.
  */
 @Controller
-public class RedditScraper {
+public class RedditScraperController {
 
   private static final String REDDIT_URL = "https://www.reddit.com/r/aww/hot.json";
 
   @Autowired
-  private VisionApi visionApi;
+  private ImageLabelingService imageLabelingService;
 
   @Autowired
-  private StorageApi storageApi;
+  private CuteImageService cuteImageService;
 
   private final Log logger = LogFactory.getLog(getClass());
 
@@ -76,29 +78,32 @@ public class RedditScraper {
 
   void storeAndLabel(RedditResponse response) {
     for (Listing listing : response.data.children) {
-      if (listing.data.preview != null) {
-        URL url;
-        byte[] raw;
-        try {
-          url = new URL(listing.data.url);
-          raw = download(url);
-        } catch (IOException ex) {
-          logger.warn("Issue in streaming image " + listing.data.url, ex);
-          continue;
-        }
-        try {
-          // Only label and upload the image if it does not already exist in storage.
-          StorageObject existing = storageApi.get(listing.data.url);
-          if (existing == null) {
-            String label = visionApi.labelImage(raw);
-            if (label != null) {
-              storageApi.uploadJpeg(listing.data.url, url, ImmutableMap.of("label", label));
-            }
-          }
-        } catch (IOException ex) {
-          logger.error("Issue with labeling image " + listing.data.url, ex);
-        }
+      storeAndLabel(listing); // functional support?
+    }
+  }
+
+  private void storeAndLabel(final Listing listing) {
+    Objects.requireNonNull(listing, "listing must not be null");
+    if (listing.data.preview == null) { // is this a bug that should be listing.data.url?
+      return;
+    }
+
+    final String dataUrl = listing.data.url;
+    try {
+      // Only label and upload the image if it does not already exist in storage.
+      final StorageObject existing = cuteImageService.get(dataUrl);
+      if (existing != null) {
+        return;
       }
+
+      final URL url = new URL(dataUrl);
+      final byte[] raw = download(url);
+      final String label = imageLabelingService.labelImage(raw);
+      if (label != null) {
+        cuteImageService.uploadJpeg(dataUrl, url, ImmutableMap.of("label", label));
+      }
+    } catch (IOException ex) {
+      logger.error("Issue with labeling or uploading image " + dataUrl, ex);
     }
   }
 

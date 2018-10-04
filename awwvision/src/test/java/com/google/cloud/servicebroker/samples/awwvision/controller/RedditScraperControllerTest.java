@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.controller;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -24,11 +24,14 @@ import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Data;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Image;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Listing;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.ListingData;
-import com.google.cloud.servicebroker.awwvision.RedditResponse.Preview;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Data;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Image;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Listing;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.ListingData;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Preview;
+import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Source;
+import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -48,13 +51,13 @@ import java.net.URL;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(properties = {"gcp-storage-bucket=fake-bucket"})
-public class RedditScraperTest {
+public class RedditScraperControllerTest {
 
   @MockBean
   Vision vision;
 
   @MockBean
-  StorageApi storageApi;
+  CuteImageService cuteImageService;
 
   // Even though this is not used directly in the test, mock it out so the application doesn't try
   // to read environment variables to set the credential.
@@ -62,7 +65,7 @@ public class RedditScraperTest {
   GoogleCredential googleCredential;
 
   @SpyBean
-  RedditScraper scraper;
+  RedditScraperController scraper;
 
   @Before
   public void setup() throws Exception {
@@ -81,17 +84,17 @@ public class RedditScraperTest {
 
   @Test
   public void testScrape() throws Exception {
-    Image img1 = new Image(new RedditResponse.Source("http://url1.com"), "img1");
-    Image img2 = new Image(new RedditResponse.Source("http://url2.com"), "img2");
+    Image img1 = new Image(new Source("http://url1.com"), "img1");
+    Image img2 = new Image(new Source("http://url2.com"), "img2");
     RedditResponse redditResponse = new RedditResponse(new Data(
         new Listing[]{new Listing(new ListingData(new Preview(new Image[]{img1, img2})))}));
     redditResponse.data.children[0].data.url = "http://listing-url.com";
 
     scraper.storeAndLabel(redditResponse);
 
-    verify(storageApi).uploadJpeg("http://listing-url.com",
+    verify(cuteImageService).uploadJpeg("http://listing-url.com",
         new URL("http://listing-url.com"), ImmutableMap.of("label", "dog"));
-    verify(storageApi).uploadJpeg("http://listing-url.com",
+    verify(cuteImageService).uploadJpeg("http://listing-url.com",
         new URL("http://listing-url.com"), ImmutableMap.of("label", "dog"));
   }
 }
