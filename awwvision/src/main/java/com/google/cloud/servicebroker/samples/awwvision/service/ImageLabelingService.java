@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.service;
 
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
@@ -29,10 +29,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Helper methods for interacting with the Cloud Vision API.
+ * Component which labels images using the Google Cloud Vision API.
  */
 @Component
-public class VisionApi {
+public class ImageLabelingService {
 
   @Autowired
   private Vision vision;

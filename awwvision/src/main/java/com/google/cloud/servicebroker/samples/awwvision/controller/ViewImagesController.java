@@ -12,9 +12,10 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.controller;
 
 import com.google.api.services.storage.model.StorageObject;
+import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,19 +24,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Provides request mappings for reading images from Cloud Storage.
+ * Provides request mappings for viewing cute images.
  */
 @Controller
-public class ViewImages {
+public class ViewImagesController {
 
   @Autowired
-  private StorageApi storageApi;
+  private CuteImageService cuteImageService;
 
   /**
    * Renders the home page.
@@ -46,10 +46,10 @@ public class ViewImages {
    */
   @RequestMapping("/")
   public String view(Model model) throws IOException {
-    List<StorageObject> objects = storageApi.listAll();
+    List<StorageObject> objects = cuteImageService.listAll();
     List<Image> images = new ArrayList<>();
     for (StorageObject obj : objects) {
-      Image image = new Image(getPublicUrl(storageApi.getBucketName(), obj.getName()),
+      Image image = new Image(getPublicUrl(cuteImageService.getBucketName(), obj.getName()),
           obj.getMetadata().get("label"));
       images.add(image);
     }
@@ -68,10 +68,10 @@ public class ViewImages {
   @RequestMapping("/label/{label}")
   public String viewLabel(@PathVariable("label") String label, Model model)
       throws IOException {
-    List<StorageObject> objects = storageApi.listAll();
+    List<StorageObject> objects = cuteImageService.listAll();
     List<Image> images = new ArrayList<>();
     for (StorageObject obj : objects) {
-      Image image = new Image(getPublicUrl(storageApi.getBucketName(), obj.getName()),
+      Image image = new Image(getPublicUrl(cuteImageService.getBucketName(), obj.getName()),
           obj.getMetadata().get("label"));
       if (image.label.equals(label)) {
         images.add(image);

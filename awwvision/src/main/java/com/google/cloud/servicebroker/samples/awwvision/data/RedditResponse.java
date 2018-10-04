@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.google.cloud.servicebroker.awwvision;
+package com.google.cloud.servicebroker.samples.awwvision.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
