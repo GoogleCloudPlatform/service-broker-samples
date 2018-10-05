@@ -1,5 +1,6 @@
 package com.google.cloud.servicebroker.examples.wiki.servicebrokerexamplewiki;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
@@ -10,6 +11,9 @@ import org.springframework.data.annotation.Id;
 public class Tiddler {
 
   @Id
+  @Field(name = "tiddlerid")
+  private String id;
+
   @Field(name = "title")
   private String title;
 
@@ -20,7 +24,7 @@ public class Tiddler {
   private String creator;
 
   @Field(name = "fields")
-  private Map<String, String> fields;
+  private LinkedHashMap<String, String> fields;
 
   @Field(name = "modified")
   private String modified;
@@ -53,11 +57,11 @@ public class Tiddler {
     this.creator = creator;
   }
 
-  public Map<String, String> getFields() {
+  public LinkedHashMap<String, String> getFields() {
     return fields;
   }
 
-  public void setFields(Map<String, String> fields) {
+  public void setFields(LinkedHashMap<String, String> fields) {
     this.fields = fields;
   }
 
@@ -107,5 +111,13 @@ public class Tiddler {
 
   public void setModifier(String modifier) {
     this.modifier = modifier;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

@@ -15,16 +15,23 @@
  */
 package com.google.cloud.servicebroker.examples.wiki.servicebrokerexamplewiki;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,23 +61,23 @@ public class StorageController {
 
   // TODO add spring security annotations for write method
   @PutMapping(value = "/recipes/all/tiddlers/{title}")
-  public void saveTiddler(@PathVariable final String title, @RequestBody final Tiddler tiddler) {
+  public void saveTiddler(@PathVariable final String title, @RequestBody final Tiddler tiddler, HttpServletResponse response)
+      throws JsonProcessingException {
     LOGGER.info("Updating tiddler {}", title);
 
-    tiddler.setTitle(title);
+    tiddler.setId(titleToId(title));
     tiddlerRepository.save(tiddler);
 
-    // etag := fmt.Sprintf("\"bag/%s/%d:%x\"", url.QueryEscape(title), rev, md5.Sum(data))
-    // w.Header().Set("Etag", etag)
+    final String objStr = new ObjectMapper().writeValueAsString(tiddler);
+    response.addHeader("Etag", String.format("\"bag/%s:%d\"", titleToId(title), objStr.hashCode()));
   }
 
   @GetMapping(value="/recipes/all/tiddlers/{title}", produces={MediaType.APPLICATION_JSON_VALUE})
   public Optional<Tiddler> getTiddler(@PathVariable String title) {
     LOGGER.info("Getting tiddler {}", title);
 
-    return tiddlerRepository.findById(title);
+    return tiddlerRepository.findById(titleToId(title));
   }
-
 
   @GetMapping(value="/recipes/all/tiddlers.json", produces={MediaType.APPLICATION_JSON_VALUE})
   public List<Tiddler> getTiddlersJson() {
@@ -87,6 +94,11 @@ public class StorageController {
   public void deleteTiddler(@PathVariable String title) {
     LOGGER.info("Deleting tiddler {}", title);
 
-    tiddlerRepository.deleteById(title);
+    tiddlerRepository.deleteById(titleToId(title));
+  }
+
+
+  private String titleToId(String title) {
+    return Base64.getUrlEncoder().encodeToString(title.getBytes());
   }
 }
