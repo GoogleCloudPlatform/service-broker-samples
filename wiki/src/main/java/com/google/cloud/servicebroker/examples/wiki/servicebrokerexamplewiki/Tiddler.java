@@ -2,15 +2,39 @@ package com.google.cloud.servicebroker.examples.wiki.servicebrokerexamplewiki;
 
 import java.util.Map;
 
+import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
+import org.springframework.cloud.gcp.data.datastore.core.mapping.Field;
+import org.springframework.data.annotation.Id;
+
+@Entity(name = "tiddlers")
 public class Tiddler {
+
+  @Id
+  @Field(name = "title")
   private String title;
+
+  @Field(name = "created")
   private String created;
+
+  @Field(name = "creator")
   private String creator;
+
+  @Field(name = "fields")
   private Map<String, String> fields;
+
+  @Field(name = "modified")
   private String modified;
+
+  @Field(name = "modifier")
   private String modifier;
+
+  @Field(name = "tags")
   private String[] tags;
+
+  @Field(name = "text")
   private String text;
+
+  @Field(name = "type")
   private String type;
 
   public String getCreated() {
