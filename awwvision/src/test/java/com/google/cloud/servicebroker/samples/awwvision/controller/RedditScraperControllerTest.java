@@ -14,16 +14,14 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.services.vision.v1.Vision;
-import com.google.api.services.vision.v1.model.AnnotateImageResponse;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
-import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.cloud.servicebroker.samples.awwvision.MockableImageAnnotatorClient;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Data;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Image;
@@ -32,14 +30,16 @@ import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.List
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Preview;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Source;
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
-import com.google.common.collect.ImmutableList;
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
+import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.common.collect.ImmutableMap;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -54,7 +54,7 @@ import java.net.URL;
 public class RedditScraperControllerTest {
 
   @MockBean
-  Vision vision;
+  MockableImageAnnotatorClient vision;
 
   @MockBean
   CuteImageService cuteImageService;
@@ -70,16 +70,20 @@ public class RedditScraperControllerTest {
   @Before
   public void setup() throws Exception {
 
-    // Have the Vision API return "dog" for any request.
-    Vision.Images images = Mockito.mock(Vision.Images.class);
-    Vision.Images.Annotate annotate = Mockito.mock(Vision.Images.Annotate.class);
-    when(vision.images()).thenReturn(images);
-    when(images.annotate(ArgumentMatchers.any(BatchAnnotateImagesRequest.class))).thenReturn(annotate);
-    when(annotate.execute()).thenReturn(
-        new BatchAnnotateImagesResponse().setResponses(ImmutableList.of(new AnnotateImageResponse()
-            .setLabelAnnotations(ImmutableList.of(new EntityAnnotation().setDescription("dog"))))));
+    Assert.assertNotNull(vision);
 
-    doReturn("".getBytes()).when(scraper).download(ArgumentMatchers.any(URL.class));
+    // Have the Vision API return "dog" for any request.
+    BatchAnnotateImagesResponse dog = BatchAnnotateImagesResponse.newBuilder()
+        .addResponses( AnnotateImageResponse.newBuilder()
+            .addLabelAnnotations( EntityAnnotation.newBuilder()
+                .setDescription("dog")
+            )
+        )
+        .build();
+
+    when(vision.mockableBatchAnnotateImages(anyListOf(AnnotateImageRequest.class))).thenReturn(dog);
+
+    doReturn("".getBytes()).when(scraper).download(any(URL.class));
   }
 
   @Test
@@ -97,4 +101,6 @@ public class RedditScraperControllerTest {
     verify(cuteImageService).uploadJpeg("http://listing-url.com",
         new URL("http://listing-url.com"), ImmutableMap.of("label", "dog"));
   }
+
+
 }

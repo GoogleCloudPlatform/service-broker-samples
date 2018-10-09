@@ -14,71 +14,50 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.config;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.StorageScopes;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.gcp.autoconfigure.core.GcpProperties;
+import org.springframework.cloud.gcp.autoconfigure.storage.GcpStorageAutoConfiguration;
+import org.springframework.cloud.gcp.autoconfigure.storage.GcpStorageProperties;
+import org.springframework.cloud.gcp.core.DefaultCredentialsProvider;
+import org.springframework.cloud.gcp.core.GcpProjectIdProvider;
+import org.springframework.cloud.gcp.core.UsageTrackingHeaderProvider;
+import org.springframework.cloud.gcp.storage.GoogleStorageProtocolResolver;
+import org.springframework.cloud.gcp.storage.GoogleStorageProtocolResolverSettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.context.annotation.Import;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.util.Base64;
 
 /**
  * Sets up connections to client libraries and other injectable beans.
  */
 @Configuration
+@EnableConfigurationProperties({GcpProperties.class, GcpStorageProperties.class})
+@Import(GoogleStorageProtocolResolver.class)
 public class StorageConfig {
 
-  @Value("${gcp-application-name}")
-  private String applicationName;
-
+  /**
+   * Gotta get that storage.
+   * 
+   * @param gcpStorageProperties props man.
+   * @param projectIdProvider more props man.
+   */
   @Bean
-  JsonFactory jsonFactory() {
-    return JacksonFactory.getDefaultInstance();
-  }
+  public Storage storage(
+      CredentialsProvider credentialsProvider,
+      GcpStorageProperties gcpStorageProperties,
+      GcpProjectIdProvider projectIdProvider) throws IOException {
 
-  @Bean
-  HttpTransport transport() throws GeneralSecurityException, IOException {
-    return GoogleNetHttpTransport.newTrustedTransport();
-  }
+    System.out.println("WOWOWOWOWOWOWOWO");
 
-  @Bean
-  GoogleCredential credential() throws IOException {
-    String env = System.getenv("VCAP_SERVICES");
-
-    String privateKeyData =
-        new JSONObject(env)
-            .getJSONArray("google-storage")
-            .getJSONObject(0)
-            .getJSONObject("credentials")
-            .getString("PrivateKeyData");
-
-    InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(privateKeyData));
-    return GoogleCredential.fromStream(stream);
-  }
-
-  @Bean
-  Storage storage(HttpTransport transport, JsonFactory jsonFactory, GoogleCredential credential) {
-    if (credential.createScopedRequired()) {
-      credential = credential.createScoped(StorageScopes.all());
-    }
-    return new Storage.Builder(transport, jsonFactory, credential)
-        .setApplicationName(applicationName).build();
-  }
-
-  @Bean
-  RestTemplate restTemplate() {
-    return new RestTemplate();
+    return GcpStorageAutoConfiguration.storage(credentialsProvider,
+        gcpStorageProperties, projectIdProvider);
   }
 }

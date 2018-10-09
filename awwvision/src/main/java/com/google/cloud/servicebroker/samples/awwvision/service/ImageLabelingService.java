@@ -14,19 +14,20 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.service;
 
-import com.google.api.services.vision.v1.Vision;
-import com.google.api.services.vision.v1.model.AnnotateImageRequest;
-import com.google.api.services.vision.v1.model.AnnotateImageResponse;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
-import com.google.api.services.vision.v1.model.Feature;
-import com.google.api.services.vision.v1.model.Image;
-import com.google.common.collect.ImmutableList;
+import com.google.cloud.servicebroker.samples.awwvision.MockableImageAnnotatorClient;
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
+import com.google.cloud.vision.v1.Feature;
+import com.google.cloud.vision.v1.Feature.Type;
+import com.google.cloud.vision.v1.Image;
+import com.google.protobuf.ByteString;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collections;
 
 /**
  * Component which labels images using the Google Cloud Vision API.
@@ -35,7 +36,7 @@ import java.io.IOException;
 public class ImageLabelingService {
 
   @Autowired
-  private Vision vision;
+  private MockableImageAnnotatorClient vision;
 
   /**
    * Calls the Vision API to get a single label for the given image.
@@ -45,9 +46,12 @@ public class ImageLabelingService {
    *         image
    */
   public String labelImage(byte[] bytes) throws IOException {
-    AnnotateImageRequest request =
-        new AnnotateImageRequest().setImage(new Image().encodeContent(bytes)).setFeatures(
-            ImmutableList.of(new Feature().setType("LABEL_DETECTION").setMaxResults(1)));
+    AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
+        .setImage(Image.newBuilder().setContent(ByteString.copyFrom(bytes)))
+        .addFeatures( Feature.newBuilder()
+            .setType(Type.LABEL_DETECTION)
+            .setMaxResults(1)
+        ).build();
     return sendAndParseRequest(request);
   }
 
@@ -56,21 +60,22 @@ public class ImageLabelingService {
     if (response == null) {
       return null;
     }
-    if (response.getLabelAnnotations() == null) {
+    if (response.getLabelAnnotations(0) == null) {
       throw new IOException(response.getError() != null ? response.getError().getMessage()
           : "Unknown error getting image annotations");
     }
-    return response.getLabelAnnotations().get(0).getDescription();
+    return response.getLabelAnnotations(0).getDescription();
   }
 
-  private AnnotateImageResponse sendRequest(AnnotateImageRequest request) throws IOException {
-    Vision.Images.Annotate annotate = vision.images()
-        .annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
+  private AnnotateImageResponse sendRequest(AnnotateImageRequest request) {
 
-    BatchAnnotateImagesResponse batchResponse = annotate.execute();
-    if (batchResponse == null || batchResponse.getResponses() == null) {
+    BatchAnnotateImagesResponse batchResponse
+        = vision.mockableBatchAnnotateImages(Collections.singletonList(request));
+
+    if (batchResponse == null) {
       return null;
     }
-    return batchResponse.getResponses().get(0);
+
+    return batchResponse.getResponses(0);
   }
 }

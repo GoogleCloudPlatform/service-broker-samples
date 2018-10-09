@@ -24,8 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.model.StorageObject;
-import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
+import com.google.cloud.servicebroker.samples.awwvision.MockableImageAnnotatorClient;
 import com.google.cloud.servicebroker.samples.awwvision.controller.ViewImagesController.Image;
+import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
@@ -44,6 +45,9 @@ import java.util.Arrays;
 @AutoConfigureMockMvc
 @SpringBootTest(properties = {"gcp-storage-bucket=fake-bucket"})
 public class ViewImagesControllerTest {
+
+  @MockBean
+  MockableImageAnnotatorClient vision;
 
   @MockBean
   Storage storageService;

@@ -14,11 +14,8 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.service;
 
-import com.google.api.client.http.InputStreamContent;
-import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.model.ObjectAccessControl;
-import com.google.api.services.storage.model.Objects;
-import com.google.api.services.storage.model.StorageObject;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +23,13 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Component which handles the storage of cuteimages from https://reddit.com/r/aww
+ * Component which handles the storage of cute images from https://reddit.com/r/aww
  *
  * <p>Uses the Cloud Storage Bucket configured in the application properties.
  */
@@ -71,38 +66,30 @@ public class CuteImageService {
   public void uploadJpeg(String name, URL url, Map<String, String> metadata)
       throws IOException {
     InputStreamContent contentStream = new InputStreamContent("image/jpeg", url.openStream());
-    StorageObject objectMetadata = new StorageObject().setName(name)
+    BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+    Blob objectMetadata = new Blob().setName(name)
         .setAcl(Collections
             .singletonList(new ObjectAccessControl().setEntity("allUsers").setRole("READER")))
         .setMetadata(metadata);
 
-    storageService.objects().insert(this.bucketName, objectMetadata, contentStream).execute();
+    storageService.create(this.bucketName, objectMetadata, contentStream).execute();
   }
 
   /**
    * Returns a List of all objects in the configured Cloud Storage bucket.
    *
-   * @return A List of {@link StorageObject}.
+   * @return A List of {@link Blob}.
    * @throws IOException If thrown by Google Storage calls.
    */
-  public List<StorageObject> listAll() throws IOException {
-    Storage.Objects.List listRequest = storageService.objects().list(this.bucketName);
+  public List<Blob> listAll() throws IOException {
 
-    List<StorageObject> results = new ArrayList<>();
-    Objects objects;
+    List<Blob> results = new ArrayList<>();
+    Storage.ListBlobsOptions options = null;
 
     // Iterate through each page of results, and add them to our results list.
     do {
-      objects = listRequest.execute();
-      if (objects.getItems() == null) {
-        break;
-      }
-      // Add the items in this page of results to the list we'll return.
-      results.addAll(objects.getItems());
-
-      // Get the next page, in the next iteration of this loop.
-      listRequest.setPageToken(objects.getNextPageToken());
-    } while (null != objects.getNextPageToken());
+      results.appendAll(storage.list(bucketName, options);
+    } while (null != options.getNextPageToken());
 
     return results;
   }
@@ -111,11 +98,11 @@ public class CuteImageService {
    * Gets a specific object in the configured Cloud Storage bucket.
    *
    * @param name The name of the object.
-   * @return The StorageObject with the specified name, or null if one does not exist.
+   * @return The Blob with the specified name, or null if one does not exist.
    */
-  public StorageObject get(String name) {
+  public Blob get(String name) {
     try {
-      return storageService.objects().get(this.bucketName, name).execute();
+      return storageService.get(BlobId.of(this.bucketName, name));
     } catch (IOException ignored) {
       return null;
     }
