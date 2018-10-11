@@ -36,9 +36,9 @@ const resultsList = new Vue({
 
 const markerIcon = {
   url: '/pin.png',
-  size: {width: 23, height: 32},
+  scaledSize: {width: 18, height: 28},
   origin: {x: 0, y: 0},
-  anchor: {x: 12, y: 32},
+  anchor: {x: 9, y: 28},
 };
 
 // Callback function for the Google Maps script.
@@ -58,9 +58,6 @@ function initMap() {
   });
 
   placesService = new google.maps.places.PlacesService(map);
-
-  const input = document.getElementById('search');
-  search = new google.maps.places.SearchBox(input);
 
   google.maps.event.addListener(map, 'bounds_changed', function () {
     getLocations(map.getBounds())

@@ -110,7 +110,7 @@ public class DatabaseInitializer implements ApplicationRunner {
           + Store.TABLE_NAME);
       spannerDatabaseAdminTemplate.executeDdlStrings(
           Collections.singletonList(
-              spannerSchemaUtils.getCreateTableDdlString(Store.class)),
+              spannerSchemaUtils.getCreateTableDDLString(Store.class)),
           true);
 
       if (storeLocatorProperties.isTestDataEnabled()) {
