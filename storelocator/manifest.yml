@@ -1,5 +1,7 @@
 ---
 applications:
 - name: storelocator
+  path: ./target/store-locator-0.0.1-SNAPSHOT.jar
   env:
     STORE_LOCATOR_MAP_KEY: "YOUR_API_KEY_HERE"
+    STORE_LOCATOR_SPANNER_DATABASE: "storelocator"

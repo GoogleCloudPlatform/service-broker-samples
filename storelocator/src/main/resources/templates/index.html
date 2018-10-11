@@ -28,11 +28,6 @@
 
 <div id="view">
   <div id="sidebar">
-    <div id="search-area">
-      <input class="form-control" id="search" placeholder="Search for locations">
-      <div id="pac-container"></div>
-    </div>
-
     <div id="results-list-container">
       <ul class="list-group" id="results-list">
         <li class="card" v-for="(item, index) in items">
@@ -67,11 +62,11 @@
 
 </script>
 <script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/vue/vue.js"></script>
+<script src="/js/main.js" th:inline="javascript"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=NO_KEY&callback=initMap"
         th:src="@{https://maps.googleapis.com/maps/api/js(key=${@storeLocatorProperties.getGoogleMap().getKey()},callback='initMap',libraries='places')}"
         async defer></script>
-<script src="/webjars/vue/vue.js"></script>
-<script src="/js/main.js" th:inline="javascript"></script>
 
 </body>
 </html>
