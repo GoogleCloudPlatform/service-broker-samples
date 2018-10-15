@@ -21,6 +21,7 @@ import com.google.cloud.vision.v1.ImageAnnotatorSettings;
 
 import org.json.JSONObject;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +33,7 @@ import java.util.Base64;
  * Sets up connections to client libraries and other injectable beans.
  */
 @Configuration
+@Conditional(CloudFoundryConfigCondition.class)
 public class VisionConfig {
 
   @Bean

@@ -22,13 +22,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.services.storage.Storage;
-import com.google.api.services.storage.model.StorageObject;
 import com.google.cloud.servicebroker.samples.awwvision.MockableImageAnnotatorClient;
 import com.google.cloud.servicebroker.samples.awwvision.controller.ViewImagesController.Image;
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
@@ -72,7 +71,7 @@ public class ViewImagesControllerTest {
     BlobInfo obj1 =
         Blob.newBuilder(BUCKET, "obj1").setMetadata(ImmutableMap.of("label", "dog")).build();
     BlobInfo obj2 =
-        Blob.newBuilder(BUCKET, "obj1").setMetadata(ImmutableMap.of("label", "cat")).build();
+        Blob.newBuilder(BUCKET, "obj2").setMetadata(ImmutableMap.of("label", "cat")).build();
 
     when(cuteImageService.listAll()).thenReturn(Arrays.asList(obj1, obj2));
     when(cuteImageService.getBucketName()).thenReturn(BUCKET);

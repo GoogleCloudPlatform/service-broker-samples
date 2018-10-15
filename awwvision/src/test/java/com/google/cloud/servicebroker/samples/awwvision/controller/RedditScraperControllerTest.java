@@ -30,6 +30,7 @@ import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.List
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Preview;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Source;
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
+import com.google.cloud.storage.Storage;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
@@ -66,6 +67,9 @@ public class RedditScraperControllerTest {
 
   @SpyBean
   RedditScraperController scraper;
+
+  @MockBean
+  Storage storage;
 
   @Before
   public void setup() throws Exception {
