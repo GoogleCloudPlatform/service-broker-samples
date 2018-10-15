@@ -16,6 +16,8 @@ package com.google.cloud.servicebroker.samples.awwvision.controller;
 
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,9 +48,9 @@ public class ViewImagesController {
    */
   @RequestMapping("/")
   public String view(Model model) throws IOException {
-    List<Blob> objects = cuteImageService.listAll();
+    List<BlobInfo> objects = cuteImageService.listAll();
     List<Image> images = new ArrayList<>();
-    for (Blob obj : objects) {
+    for (BlobInfo obj : objects) {
       Image image = new Image(getPublicUrl(cuteImageService.getBucketName(), obj.getName()),
           obj.getMetadata().get("label"));
       images.add(image);
@@ -68,9 +70,9 @@ public class ViewImagesController {
   @RequestMapping("/label/{label}")
   public String viewLabel(@PathVariable("label") String label, Model model)
       throws IOException {
-    List<Blob> objects = cuteImageService.listAll();
+    List<BlobInfo> objects = cuteImageService.listAll();
     List<Image> images = new ArrayList<>();
-    for (Blob obj : objects) {
+    for (BlobInfo obj : objects) {
       Image image = new Image(getPublicUrl(cuteImageService.getBucketName(), obj.getName()),
           obj.getMetadata().get("label"));
       if (image.label.equals(label)) {

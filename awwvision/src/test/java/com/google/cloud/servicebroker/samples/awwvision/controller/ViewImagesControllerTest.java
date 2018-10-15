@@ -27,6 +27,8 @@ import com.google.api.services.storage.model.StorageObject;
 import com.google.cloud.servicebroker.samples.awwvision.MockableImageAnnotatorClient;
 import com.google.cloud.servicebroker.samples.awwvision.controller.ViewImagesController.Image;
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobInfo;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
@@ -67,10 +69,10 @@ public class ViewImagesControllerTest {
 
   @Before
   public void setup() throws Exception {
-    StorageObject obj1 =
-        new StorageObject().setName("obj1").setMetadata(ImmutableMap.of("label", "dog"));
-    StorageObject obj2 =
-        new StorageObject().setName("obj2").setMetadata(ImmutableMap.of("label", "cat"));
+    BlobInfo obj1 =
+        Blob.newBuilder(BUCKET, "obj1").setMetadata(ImmutableMap.of("label", "dog")).build();
+    BlobInfo obj2 =
+        Blob.newBuilder(BUCKET, "obj1").setMetadata(ImmutableMap.of("label", "cat")).build();
 
     when(cuteImageService.listAll()).thenReturn(Arrays.asList(obj1, obj2));
     when(cuteImageService.getBucketName()).thenReturn(BUCKET);

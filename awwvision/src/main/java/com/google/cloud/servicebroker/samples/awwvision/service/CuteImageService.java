@@ -14,8 +14,16 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.service;
 
+import com.google.api.client.http.InputStreamContent;
+import com.google.api.gax.paging.Page;
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.Acl.Role;
+import com.google.cloud.storage.Acl.User;
 import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import com.google.common.collect.Lists;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Component which handles the storage of cute images from https://reddit.com/r/aww
@@ -66,13 +75,10 @@ public class CuteImageService {
   public void uploadJpeg(String name, URL url, Map<String, String> metadata)
       throws IOException {
     InputStreamContent contentStream = new InputStreamContent("image/jpeg", url.openStream());
-    BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-    Blob objectMetadata = new Blob().setName(name)
-        .setAcl(Collections
-            .singletonList(new ObjectAccessControl().setEntity("allUsers").setRole("READER")))
-        .setMetadata(metadata);
-
-    storageService.create(this.bucketName, objectMetadata, contentStream).execute();
+    storageService.create(BlobInfo.newBuilder(this.bucketName, name)
+        .setAcl(Collections.singletonList(Acl.newBuilder(User.ofAllUsers(), Role.READER).build()))
+        .setMetadata(metadata)
+        .build(), contentStream.getInputStream());
   }
 
   /**
@@ -81,17 +87,21 @@ public class CuteImageService {
    * @return A List of {@link Blob}.
    * @throws IOException If thrown by Google Storage calls.
    */
-  public List<Blob> listAll() throws IOException {
+  public List<BlobInfo> listAll() throws IOException {
 
-    List<Blob> results = new ArrayList<>();
-    Storage.ListBlobsOptions options = null;
+    Page<Blob> page = storageService.list(bucketName);
+    List<Blob> results = new ArrayList<>(Lists.newArrayList(page.getValues()));
 
     // Iterate through each page of results, and add them to our results list.
-    do {
-      results.appendAll(storage.list(bucketName, options);
-    } while (null != options.getNextPageToken());
+    while (page.hasNextPage()) {
+      page = page.getNextPage();
+      results.addAll(Lists.newArrayList(page.getValues()));
+    }
 
-    return results;
+    return results.stream()
+        .map(BlobInfo::getBlobId)
+        .map(b -> BlobInfo.newBuilder(b).build())
+        .collect(Collectors.toList());
   }
 
   /**
@@ -101,10 +111,6 @@ public class CuteImageService {
    * @return The Blob with the specified name, or null if one does not exist.
    */
   public Blob get(String name) {
-    try {
-      return storageService.get(BlobId.of(this.bucketName, name));
-    } catch (IOException ignored) {
-      return null;
-    }
+    return storageService.get(BlobId.of(this.bucketName, name));
   }
 }

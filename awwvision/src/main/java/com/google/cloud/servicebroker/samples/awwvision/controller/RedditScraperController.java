@@ -14,11 +14,11 @@
 
 package com.google.cloud.servicebroker.samples.awwvision.controller;
 
-import com.google.api.services.storage.model.StorageObject;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse;
 import com.google.cloud.servicebroker.samples.awwvision.data.RedditResponse.Listing;
 import com.google.cloud.servicebroker.samples.awwvision.service.CuteImageService;
 import com.google.cloud.servicebroker.samples.awwvision.service.ImageLabelingService;
+import com.google.cloud.storage.Blob;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
@@ -91,7 +91,7 @@ public class RedditScraperController {
     final String dataUrl = listing.data.url;
     try {
       // Only label and upload the image if it does not already exist in storage.
-      final StorageObject existing = cuteImageService.get(dataUrl);
+      final Blob existing = cuteImageService.get(dataUrl);
       if (existing != null) {
         return;
       }
