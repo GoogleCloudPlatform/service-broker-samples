@@ -29,24 +29,30 @@ You must bind a CloudSQL MySQL instance to the app using the GCP Service Broker.
 It also needs an API token to access the vulnerability scanner and screenshot generator.
 You can add the API token to the `google.api.key` field in `application.properties` file or inject it via the `GOOGLE_API_KEY` environment variable.
 
-You can setup the environment using:
-
-```bash
-# Create the service:
-$ cf create-service google-cloudsql-mysql mysql-db-g1-small short-links-db
-# Wait for it to spin up by repeatedly running:
-$ cf service short-links-db
-# Bind it when ready
-$ cf bind-service link-shortener short-links-db -c '{"role":"cloudsql.editor"}'
-```
-
 Edit the manifest.yml file to add your API key.
 
 You can build and deploy the app using:
 
 ```bash
-$ mvn package -DskipTests=true
-$ cf push -p target/spring-boot-example-linkshortener-0.0.1-SNAPSHOT.jar
+mvn package -DskipTests=true
+cf push --no-start -p target/spring-boot-example-linkshortener-0.0.1-SNAPSHOT.jar link-shortener
+```
+
+You can setup the environment using:
+
+```bash
+# Create the service:
+cf create-service google-cloudsql-mysql mysql-db-g1-small short-links-db
+# Wait for it to spin up by repeatedly running:
+cf service short-links-db
+# Bind it when ready
+cf bind-service link-shortener short-links-db -c '{"role":"cloudsql.editor"}'
+```
+
+Once the application is bound, you can start it:
+
+```bash
+cf start link-shortener
 ```
 
 ## Technologies Showcased
