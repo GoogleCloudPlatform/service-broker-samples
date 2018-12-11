@@ -11,8 +11,9 @@ Store Locator is a Spring Boot Application which displays store locations on a m
 # Deploy
 * `cf create-service google-spanner sandbox storelocator-spanner`
 * `cf service storelocator`
+* `cf push --no-start -p target/store-locator-0.0.1-SNAPSHOT.jar storelocator`
 * `cf bind-service storelocator storelocator-spanner -c '{"role":"spanner.databaseAdmin"}'`
-* `cf push -p target/store-locator-0.0.1-SNAPSHOT.jar`
+* `cf start storelocator`
  
 # Technologies Showcased
 * [Google Spanner](https://cloud.google.com/spanner/)
