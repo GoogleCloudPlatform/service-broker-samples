@@ -7,6 +7,9 @@ the GCP Service Broker, such as [Pivotal Cloud Foundry](https://pivotal.io/platf
 
 This is not an officially supported Google product.
 
+## CF on Kubernetes Demo
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=http://github.com/GoogleCloudPlatform/service-broker-samples&cloudshell_git_branch=eirini&cloudshell_image=gcr.io/cloud-graphite-ci/cf-in-k8s-cloudshell&cloudshell_tutorial=docs/cf-on-k8s-cloudshell-tutorial.md)
+
 ## Contributing changes
 
 Entirely new samples are accepted if they showcase something new or provide a unique perspective or use-case, we'll help get them ready to be added.
