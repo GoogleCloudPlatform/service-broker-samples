@@ -94,12 +94,6 @@ data "template_file" "helm_config" {
     BLOBSTORE_PASSWORD = "${random_string.BLOBSTORE_PASSWORD.result}"
     BITS_SERVICE_SECRET = "${random_string.BITS_SERVICE_SECRET.result}"
     BITS_SERVICE_SIGNING_USER_PASSWORD = "${random_string.BITS_SERVICE_SIGNING_USER_PASSWORD.result}"
-    BITS_TLS_CRT = <<EOF
-${acme_certificate.bits_cert.certificate_pem}
-EOF
-    BITS_TLS_KEY = <<EOF
-${acme_certificate.bits_cert.private_key_pem}
-EOF
   }
 }
 

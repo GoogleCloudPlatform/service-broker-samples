@@ -24,6 +24,18 @@ resource "helm_release" "scf" {
     name = "secrets.UAA_CA_CERT"
     value = "${lookup(data.external.uaa_cert.result, "ca_cert")}"
   }
+  set {
+    name = "eirini.secrets.BITS_TLS_CRT"
+    value = <<EOF
+${acme_certificate.bits_cert.certificate_pem}
+EOF
+  }
+  set {
+    name = "eirini.secrets.BITS_TLS_KEY"
+    value = <<EOF
+${acme_certificate.bits_cert.private_key_pem}
+EOF
+  }
   wait = false
 
   # wait for the load balancer ips to exist
