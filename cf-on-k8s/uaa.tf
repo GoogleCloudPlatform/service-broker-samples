@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data "external" "uaa_cert" {
-  depends_on = ["helm_release.uaa"]
-  program = ["./scripts/get-cert.sh", "${var.cluster_name}", "${var.zone}", "${var.project_id}"]
-}
-
 resource "helm_release" "uaa" {
 
   name       = "uaa"
@@ -59,3 +54,10 @@ resource "google_dns_record_set" "uaa-uaa-public-wildcard" {
   rrdatas = ["${data.kubernetes_service.uaa-uaa-public.load_balancer_ingress.0.ip}"]
 }
 
+data "kubernetes_secret" "uaa_secrets" {
+  depends_on = ["helm_release.uaa"]
+  metadata {
+    name =  "secrets-2.14.5-1"
+    namespace = "uaa"
+  }
+}

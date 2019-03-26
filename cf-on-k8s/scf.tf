@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 resource "helm_release" "scf" {
   depends_on = ["data.external.uaa_cert"]
   name       = "scf"
@@ -22,7 +21,7 @@ resource "helm_release" "scf" {
   values = [ "${data.template_file.helm_config.rendered}" ]
   set {
     name = "secrets.UAA_CA_CERT"
-    value = "${lookup(data.external.uaa_cert.result, "ca_cert")}"
+    value = "${data.kubernetes_secret.uaa_secrets.data["internal-ca-cert"]}"
   }
   set {
     name = "eirini.secrets.BITS_TLS_CRT"
