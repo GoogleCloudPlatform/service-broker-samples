@@ -98,7 +98,7 @@ data "template_file" "helm_config" {
 ${acme_certificate.bits_cert.certificate_pem}
 EOF
     BITS_TLS_KEY = <<EOF
-${acme_certificate.bits_cert.private_key_pem}"
+${acme_certificate.bits_cert.private_key_pem}
 EOF
   }
 }
