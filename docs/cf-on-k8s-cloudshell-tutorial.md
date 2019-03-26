@@ -1,17 +1,18 @@
-# First Tutorial
+# Install CF on GKE
 
-## First step
+## Introduction
 
-Hello World
+This tutorial will create a Cloud Foundry platform on GKE. All infrastructure will also be created.
 
-### Part 1
+### Installation
 
-Part One Instructions.
+* enable APIs
+* terraform apply -auto-approve
 
-### Part 2
+## Cleanup
 
-Part Two Instructions.
+terraform destroy
 
 ## Conclusion
 
-Done!
+Congratulations!
