@@ -13,28 +13,16 @@
 # limitations under the License.
 
 resource "helm_release" "scf" {
-  depends_on = ["data.external.uaa_cert"]
   name       = "scf"
   namespace  = "scf"
   repository = "${helm_repository.default.name}"
   chart      = "cf"
-  values = [ "${data.template_file.helm_config.rendered}" ]
-  set {
-    name = "secrets.UAA_CA_CERT"
-    value = "${data.kubernetes_secret.uaa_secrets.data["internal-ca-cert"]}"
-  }
-  set {
-    name = "eirini.secrets.BITS_TLS_CRT"
-    value = <<EOF
-${acme_certificate.bits_cert.certificate_pem}
-EOF
-  }
-  set {
-    name = "eirini.secrets.BITS_TLS_KEY"
-    value = <<EOF
-${acme_certificate.bits_cert.private_key_pem}
-EOF
-  }
+  values = [
+    "${data.template_file.helm_config.rendered}",
+    "${replace("{\"secrets\": {\"UAA_CA_CERT\": \"${data.kubernetes_secret.uaa_secrets.data["internal-ca-cert"]}\"}}", "\n", "\\n")}",
+    "${replace("{\"eirini\":  {\"secrets\": {\"BITS_TLS_CRT\": \"${acme_certificate.bits_cert.certificate_pem}\n${acme_certificate.bits_cert.issuer_pem}\"}}}", "\n", "\\n")}",
+    "${replace("{\"eirini\": {\"secrets\": {\"BITS_TLS_KEY\": \"${acme_certificate.bits_cert.private_key_pem}\"}}}", "\n", "\\n")}"
+  ]
   wait = false
 
   # wait for the load balancer ips to exist
@@ -98,6 +86,16 @@ resource "google_dns_record_set" "bits" {
   rrdatas = ["${data.kubernetes_service.bits.load_balancer_ingress.0.ip}"]
 }
 
+resource "local_file" "generated_config" {
+  content  = <<EOF
+${helm_release.scf.values.0}
+${helm_release.scf.values.1}
+${helm_release.scf.values.2}
+${helm_release.scf.values.3}
+EOF
+  filename = "${path.module}/config.yml"
+}
+
 resource "null_resource" "wait-for-scf" {
 
   triggers {
@@ -106,6 +104,6 @@ resource "null_resource" "wait-for-scf" {
   }
 
   provisioner "local-exec" {
-    command = "./scripts/wait-for-scf.sh"
+    command = "${path.module}/scripts/wait-for-scf.sh"
   }
 }

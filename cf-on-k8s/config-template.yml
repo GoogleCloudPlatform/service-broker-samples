@@ -54,11 +54,11 @@ eirini:
     loadbalanced: true
 
   opi:
-    use_registry_ingress: true
+    use_registry_ingress: false
     # Enable if use_registry_ingress is set to 'true'
     # Note that this is just the domain. The helm chart adds 'eirini.', unlike UAA_HOST
     ingress_endpoint: "${DOMAIN}"
-    namespace: eirini
+    namespace: apps
 
   secrets:
     BITS_SERVICE_SECRET: "${BITS_SERVICE_SECRET}"

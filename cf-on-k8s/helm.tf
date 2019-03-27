@@ -86,7 +86,7 @@ resource "random_string" "BITS_SERVICE_SIGNING_USER_PASSWORD" {
 }
 
 data "template_file" "helm_config" {
-  template = "${file("config.yml")}"
+  template = "${file("${path.module}/config-template.yml")}"
   vars = {
     DOMAIN = "${substr("${var.scf_subdomain}.${data.google_dns_managed_zone.root_zone.dns_name}", 0, length("${var.scf_subdomain}.${data.google_dns_managed_zone.root_zone.dns_name}") - 1)}"
     CLUSTER_ADMIN_PASSWORD = "${random_string.CLUSTER_ADMIN_PASSWORD.result}"

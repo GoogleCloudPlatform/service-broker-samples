@@ -18,7 +18,7 @@ provider "google" {
 }
 
 provider "acme" {
-  server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 
@@ -89,7 +89,6 @@ resource "acme_certificate" "bits_cert" {
     provider = "gcloud"
     config {
       GCE_POLLING_INTERVAL="2"
-      GCE_PROPAGATION_TIMEOUT="300"
       GCE_PROJECT = "${var.project_id}"
       GCE_TTL = "5"
     }
