@@ -96,14 +96,3 @@ EOF
   filename = "${path.module}/config.yml"
 }
 
-resource "null_resource" "wait-for-scf" {
-
-  triggers {
-    t = "values ${join(",", helm_release.scf.values)}"
-    t2 = "version ${helm_release.scf.version}"
-  }
-
-  provisioner "local-exec" {
-    command = "${path.module}/scripts/wait-for-scf.sh"
-  }
-}
