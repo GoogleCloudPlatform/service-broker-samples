@@ -1,0 +1,7 @@
+---
+applications:
+- name: awwvision
+  memory: 1024M
+  instances: 1
+  env:
+    BP_JAVA_VERSION: 8.*
